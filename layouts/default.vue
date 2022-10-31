@@ -8,21 +8,52 @@
       fixed
       app
     >
-      <v-list>
-        <v-list-item
+      <v-header
+        :absolute="!fixed"
+        app
+        class="d-flex align-center justify-center"
+      >
+        <span>Nuux App v.{{ version }}</span>
+      </v-header>
+      <v-list v-if="!isAuthenticated">
+        <div
           v-for="(item, i) in items"
           :key="i"
-          :to="item.to"
-          router
-          exact
         >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+          <v-list-item
+            v-if="isAuthenticated === item.isAuth"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+      </v-list>
+      <v-list v-else>
+        <div
+          v-for="(item, i) in items"
+          :key="i"
+        >
+          <v-list-item
+            v-if="isAuthenticated === item.isAuth"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -65,6 +96,7 @@
       <template v-else>
         <div class="mr-4">
           <v-btn
+            v-if="isDesktop"
             to="/profile"
             router
             exact
@@ -74,7 +106,6 @@
         </div>
         <div class="mr-4">
           <v-btn
-            to="/"
             router
             exact
             @click="logout"
@@ -94,16 +125,18 @@
       app
       class="d-flex align-center justify-center"
     >
-      <span>Group ONE Developer &copy; {{ new Date().getFullYear() }}</span>
+      <span>Group ONE &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
+import packageInfo from '../package'
 export default {
   name: 'DefaultLayout',
   data () {
     return {
+      version: packageInfo.version,
       isMobile: false,
       isDesktop: false,
       isMenuLogin: false,
@@ -117,14 +150,28 @@ export default {
       title: 'Nuux App',
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/welcome'
+          icon: 'mdi-home',
+          title: 'Home',
+          to: '/welcome',
+          isAuth: true
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-account',
+          title: 'Profile',
+          to: '/profile',
+          isAuth: true
+        },
+        {
+          icon: 'mdi-login',
+          title: 'Login',
+          to: '/auth/login',
+          isAuth: false
+        },
+        {
+          icon: 'mdi-account-plus',
+          title: 'Register',
+          to: '/auth/register',
+          isAuth: false
         }
       ]
     }
@@ -148,7 +195,7 @@ export default {
   methods: {
     async logout () {
       await this.$auth.logout()
-      this.onCheckMenuLogin()
+      this.isMenuLogin = false
     },
     onResize () {
       this.isMobile = window.innerWidth < 600
