@@ -1,6 +1,7 @@
 <template>
   <v-app dark>
     <v-navigation-drawer
+      v-if="isMobile"
       v-model="drawer"
       :mini-variant="miniVariant"
       :clipped="clipped"
@@ -29,15 +30,59 @@
       fixed
       app
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" />
       <v-btn
         to="/"
         router
         exact
+        @click="onCheckMenuLogin"
       >
-        <v-toolbar-title>{{ title }}</v-toolbar-title>
+        {{ title }}
       </v-btn>
       <v-spacer />
+      <template v-if="!isAuthenticated">
+        <div v-if="isMenuLogin === true" class="mr-4">
+          <v-btn
+            to="/auth/login"
+            router
+            exact
+            @click="onCheckMenuLogin"
+          >
+            Login
+          </v-btn>
+        </div>
+        <div v-if="isMenuRegister === true" class="mr-4">
+          <v-btn
+            to="/auth/register"
+            router
+            exact
+            @click="onCheckMenuLogin"
+          >
+            Register
+          </v-btn>
+        </div>
+      </template>
+      <template v-else>
+        <div class="mr-4">
+          <v-btn
+            to="/profile"
+            router
+            exact
+          >
+            Profile
+          </v-btn>
+        </div>
+        <div class="mr-4">
+          <v-btn
+            to="/"
+            router
+            exact
+            @click="logout"
+          >
+            Logout
+          </v-btn>
+        </div>
+      </template>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -59,9 +104,17 @@ export default {
   name: 'DefaultLayout',
   data () {
     return {
+      isMobile: false,
+      isDesktop: false,
+      isMenuLogin: false,
+      isMenuRegister: false,
       clipped: true,
       drawer: false,
       fixed: false,
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Nuux App',
       items: [
         {
           icon: 'mdi-apps',
@@ -73,16 +126,43 @@ export default {
           title: 'Inspire',
           to: '/inspire'
         }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: 'Nuux App'
+      ]
     }
   },
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    }
+  },
+  beforeDestroy () {
+    if (typeof window === 'undefined') { return }
+    window.removeEventListener('resize', this.onResize, { passive: true })
+  },
+
+  mounted () {
+    this.onResize()
+    this.onCheckMenuLogin()
+    window.addEventListener('resize', this.onResize, { passive: true })
+    console.log(this.$vuetify.breakpoint.width)
+  },
   methods: {
-    home () {
-      window.location.href = '/'
+    async logout () {
+      await this.$auth.logout()
+      this.onCheckMenuLogin()
+    },
+    onResize () {
+      this.isMobile = window.innerWidth < 600
+      this.isDesktop = window.innerWidth > 600
+    },
+    onCheckMenuLogin () {
+      const url = window.location.pathname
+      if (url === '/' || url === '/auth/login') {
+        this.isMenuLogin = false
+        this.isMenuRegister = true
+      } else {
+        this.isMenuRegister = false
+        this.isMenuLogin = true
+      }
     }
   }
 }
