@@ -5,7 +5,9 @@
 </template>
 
 <script>
-export default {}
+export default {
+  middleware: 'isAuthenticated'
+}
 </script>
 
   <style></style>
