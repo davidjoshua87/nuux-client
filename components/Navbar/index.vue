@@ -1,0 +1,257 @@
+<template>
+  <div>
+    <v-navigation-drawer
+      v-if="isMobile"
+      v-model="drawer"
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      fixed
+      app
+    >
+      <div
+        :absolute="!fixed"
+        app
+        class="d-flex align-center justify-center py-3"
+      >
+        <span>Nuux App v.{{ version }}</span>
+      </div>
+      <v-list v-if="!isAuthenticated">
+        <div
+          v-for="(item, i) in items"
+          :key="i"
+        >
+          <v-list-item
+            v-if="isAuthenticated === item.isAuth"
+            :to="item.to"
+            router
+            exact
+            @click="onChangeMenu(item.title)"
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+      </v-list>
+      <v-list v-else>
+        <div
+          v-for="(item, i) in items"
+          :key="i"
+        >
+          <v-list-item
+            v-if="isAuthenticated === item.isAuth"
+            :to="item.to"
+            router
+            exact
+          >
+            <v-list-item-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </div>
+      </v-list>
+    </v-navigation-drawer>
+
+    <v-app-bar
+      :clipped-left="clipped"
+      fixed
+      app
+    >
+      <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" />
+      <v-btn
+        to="/welcome"
+        router
+        exact
+        @click="resetUrl"
+      >
+        {{ title }}
+      </v-btn>
+      <v-spacer />
+      <template v-if="!isAuthenticated">
+        <div v-if="isMenuLogin === true" class="mr-4">
+          <v-btn
+            to="/auth/login"
+            router
+            exact
+            @click="onCheckMenuLogin"
+          >
+            Login
+          </v-btn>
+        </div>
+        <div v-if="isMenuRegister === true" class="mr-4">
+          <v-btn
+            to="/auth/register"
+            router
+            exact
+            @click="onCheckMenuRegister"
+          >
+            Register
+          </v-btn>
+        </div>
+      </template>
+      <template v-else>
+        <div class="mr-4">
+          <v-btn
+            v-if="isDesktop"
+            to="/profile"
+            router
+            exact
+          >
+            Profile
+          </v-btn>
+        </div>
+        <div class="mr-4">
+          <v-btn
+            router
+            exact
+            @click="logout"
+          >
+            Logout
+          </v-btn>
+        </div>
+      </template>
+    </v-app-bar>
+
+    <div v-if="showMessage === true" class="void" />
+
+    <v-row class="py-4 d-flex justify-center">
+      <v-alert v-if="showMessage" transition="scale-transition" type="success">
+        <strong>{{ message }}</strong>
+      </v-alert>
+      <v-alert v-if="showError" transition="scale-transition" type="error">
+        <strong>{{ message }}</strong>
+      </v-alert>
+    </v-row>
+
+    <div v-if="loading" class="void" />
+
+    <v-row class="py-4 d-flex justify-center">
+      <v-progress-circular v-if="loading" :size="70" :width="7" color="white" indeterminate />
+    </v-row>
+  </div>
+</template>
+
+<script>
+import packageInfo from '../../package.json'
+export default {
+  name: 'NavbarComponent',
+  data () {
+    return {
+      version: packageInfo.version,
+      loading: false,
+      showMessage: false,
+      showError: false,
+      message: '',
+      isMobile: false,
+      isDesktop: false,
+      isMenuLogin: false,
+      isMenuRegister: true,
+      clipped: true,
+      drawer: false,
+      fixed: false,
+      miniVariant: false,
+      right: true,
+      rightDrawer: false,
+      title: 'Nuux App',
+      items: [
+        {
+          icon: 'mdi-home',
+          title: 'Home',
+          to: '/welcome',
+          isAuth: true
+        },
+        {
+          icon: 'mdi-account',
+          title: 'Profile',
+          to: '/profile',
+          isAuth: true
+        },
+        {
+          icon: 'mdi-login',
+          title: 'Login',
+          to: '/auth/login',
+          isAuth: false
+        },
+        {
+          icon: 'mdi-account-plus',
+          title: 'Register',
+          to: '/auth/register',
+          isAuth: false
+        }
+      ]
+    }
+  },
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    }
+  },
+  beforeDestroy () {
+    if (typeof window === 'undefined') { return }
+    window.removeEventListener('resize', this.onResize, { passive: true })
+  },
+  mounted () {
+    this.onResize()
+    window.addEventListener('resize', this.onResize, { passive: true })
+    this.resetUrl()
+  },
+  methods: {
+    logout () {
+      this.loading = true
+      localStorage.setItem('loadingOut', this.loading)
+      this.$router.push('/')
+
+      setTimeout(() => {
+        this.showMessage = true
+        this.message = 'Logout Succesfull'
+        this.$auth.logout()
+        localStorage.removeItem('loadingOut')
+        this.loading = false
+        setTimeout(() => {
+          this.showMessage = false
+          this.message = ''
+        }, 500)
+      }, 1000)
+    },
+    onResize () {
+      this.isMobile = window.innerWidth < 600
+      this.isDesktop = window.innerWidth > 600
+    },
+    onCheckMenuLogin () {
+      this.isMenuRegister = !this.isMenuRegister
+      this.isMenuLogin = !this.isMenuLogin
+    },
+    onCheckMenuRegister () {
+      this.isMenuRegister = !this.isMenuRegister
+      this.isMenuLogin = !this.isMenuLogin
+    },
+    onChangeMenu (title) {
+      if (title === 'Login') {
+        this.isMenuRegister = true
+        this.isMenuLogin = false
+      } else {
+        this.isMenuRegister = false
+        this.isMenuLogin = true
+      }
+    },
+    resetUrl () {
+      if (window.location.href !== '/welcome') {
+        this.$router.push('/')
+      }
+    }
+  }
+}
+</script>
+
+<style>
+.void {
+  display: transparent;
+  height: 100px;
+}
+</style>
