@@ -190,7 +190,6 @@ export default {
     this.onResize()
     this.onCheckMenuLogin()
     window.addEventListener('resize', this.onResize, { passive: true })
-    console.log(this.$vuetify.breakpoint.width)
   },
   methods: {
     async logout () {
