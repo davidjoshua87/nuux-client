@@ -13,7 +13,7 @@
         app
         class="d-flex align-center justify-center py-3"
       >
-        <span>Nuux App v.{{ version }}</span>
+        <span>Mux v.{{ version }}</span>
       </div>
       <v-list v-if="!isAuthenticated">
         <div
