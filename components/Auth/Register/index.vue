@@ -17,7 +17,7 @@
                 Adventure starts here 🚀
               </h5>
               <p class="mb-4">
-                Make your app management easy and fun!
+                Make your life relaxing and fun!
               </p>
             </div>
             <v-form ref="form" v-model="valid" autocomplete="off" lazy-validation>
