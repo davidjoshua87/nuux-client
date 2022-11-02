@@ -2,38 +2,68 @@
   <div>
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="6">
-        <v-card v-if="showCard" class="logo py-4 d-flex justify-center">
-          <v-form ref="form" v-model="valid" autocomplete="off" lazy-validation>
-            <v-text-field
-              v-model="registerData.fullname"
-              autocomplete="off"
-              :counter="25"
-              :rules="nameRules"
-              label="Fullname"
-              required
-            />
-            <v-text-field
-              v-model="registerData.email"
-              autocomplete="off"
-              :rules="emailRules"
-              name="input-email"
-              label="Email"
-              required
-            />
-            <v-text-field
-              v-model="registerData.password"
-              autocomplete="off"
-              :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="passwordRules"
-              :type="showPassword ? 'text' : 'password'"
-              name="input-password"
-              label="Password"
-              @click:append="showPassword = !showPassword"
-            />
-            <v-btn :disabled="!valid" color="success" class="mr-4" @click="register">
-              Register
-            </v-btn>
-          </v-form>
+        <v-card v-if="showCard" elevation="18" class="logo pa-4 ma-lg-4 ma-md-2 d-flex align-center justify-center">
+          <div>
+            <div class="d-flex justify-center ma-4">
+              <div class="mr-2">
+                <img src="~/assets/images/logo-mux.png" height="25">
+              </div>
+              <div class="v-card-title font-weight-semibold text-h5 text-uppercase">
+                Mux
+              </div>
+            </div>
+            <div class="v-card-text pt-2">
+              <h5 class="text-h5 font-weight-semibold mb-4">
+                Adventure starts here 🚀
+              </h5>
+              <p class="mb-4">
+                Make your app management easy and fun!
+              </p>
+            </div>
+            <v-form ref="form" v-model="valid" autocomplete="off" lazy-validation>
+              <v-text-field
+                v-model="registerData.fullname"
+                autocomplete="off"
+                :counter="25"
+                :rules="nameRules"
+                label="Fullname"
+                required
+              />
+              <v-text-field
+                v-model="registerData.email"
+                autocomplete="off"
+                :rules="emailRules"
+                name="input-email"
+                label="Email"
+                required
+              />
+              <v-text-field
+                v-model="registerData.password"
+                autocomplete="off"
+                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="passwordRules"
+                :type="showPassword ? 'text' : 'password'"
+                name="input-password"
+                label="Password"
+                @click:append="showPassword = !showPassword"
+              />
+              <v-btn :disabled="!valid" color="success" class="my-2" width="100%" @click="register">
+                Register
+              </v-btn>
+            </v-form>
+            <div class="v-col v-col-12 text-center text-base ma-4">
+              <span>Already have an account?</span>
+              <v-btn
+                to="/auth/login"
+                plain
+                router
+                exact
+                style="text-transform:capitalize;"
+              >
+                <a class="text-primary ms-2">  Sign in instead </a>
+              </v-btn>
+            </div>
+          </div>
         </v-card>
 
         <v-row class="py-4 d-flex justify-center">
@@ -122,7 +152,7 @@ export default {
                       localStorage.setItem('message', this.message)
                       localStorage.setItem('showMessage', this.showMessage)
                       setTimeout(() => {
-                        this.$router.push('/welcome')
+                        this.$router.push('/home')
                         localStorage.removeItem('showCard')
                         localStorage.removeItem('loading')
                         localStorage.removeItem('message')

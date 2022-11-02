@@ -1,5 +1,5 @@
 {
-  "name": "nuux",
+  "name": "mux",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -38,5 +38,8 @@
     "jest-environment-jsdom": "^29.1.2",
     "prettier": "^2.7.1",
     "vue-jest": "^3.0.4"
+  },
+  "engines": {
+    "node": "16.0.0"
   }
 }

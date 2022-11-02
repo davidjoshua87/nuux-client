@@ -25,7 +25,6 @@
             :to="item.to"
             router
             exact
-            @click="onChangeMenu(item.title)"
           >
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
@@ -59,21 +58,27 @@
     </v-navigation-drawer>
 
     <v-app-bar
+      absolute
       :clipped-left="clipped"
       fixed
       app
     >
       <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" />
       <v-btn
-        to="/welcome"
+        to="/home"
         router
         exact
         @click="resetUrl"
       >
-        {{ title }}
+        <div>
+          <img src="~/assets/images/logo-mux.png">
+        </div>
+        <h1 class="font-weight-semibold leading-normal text-xl text-uppercase ml-2">
+          {{ title }}
+        </h1>
       </v-btn>
       <v-spacer />
-      <template v-if="!isAuthenticated">
+      <!-- <template v-if="!isAuthenticated">
         <div v-if="isMenuLogin === true" class="mr-4">
           <v-btn
             to="/auth/login"
@@ -94,9 +99,9 @@
             Register
           </v-btn>
         </div>
-      </template>
-      <template v-else>
-        <div class="mr-4">
+      </template> -->
+      <template v-if="isAuthenticated">
+        <div class="mr-4 ml-4">
           <v-btn
             v-if="isDesktop"
             to="/profile"
@@ -158,12 +163,12 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Nuux App',
+      title: 'Mux',
       items: [
         {
           icon: 'mdi-home',
           title: 'Home',
-          to: '/welcome',
+          to: '/home',
           isAuth: true
         },
         {
@@ -223,25 +228,25 @@ export default {
       this.isMobile = window.innerWidth < 600
       this.isDesktop = window.innerWidth > 600
     },
-    onCheckMenuLogin () {
-      this.isMenuRegister = !this.isMenuRegister
-      this.isMenuLogin = !this.isMenuLogin
-    },
-    onCheckMenuRegister () {
-      this.isMenuRegister = !this.isMenuRegister
-      this.isMenuLogin = !this.isMenuLogin
-    },
-    onChangeMenu (title) {
-      if (title === 'Login') {
-        this.isMenuRegister = true
-        this.isMenuLogin = false
-      } else {
-        this.isMenuRegister = false
-        this.isMenuLogin = true
-      }
-    },
+    // onCheckMenuLogin () {
+    //   this.isMenuRegister = !this.isMenuRegister
+    //   this.isMenuLogin = !this.isMenuLogin
+    // },
+    // onCheckMenuRegister () {
+    //   this.isMenuRegister = !this.isMenuRegister
+    //   this.isMenuLogin = !this.isMenuLogin
+    // },
+    // onChangeMenu (title) {
+    //   if (title === 'Login') {
+    //     this.isMenuRegister = true
+    //     this.isMenuLogin = false
+    //   } else {
+    //     this.isMenuRegister = false
+    //     this.isMenuLogin = true
+    //   }
+    // },
     resetUrl () {
-      if (window.location.href !== '/welcome') {
+      if (window.location.href !== '/home') {
         this.$router.push('/')
       }
     }

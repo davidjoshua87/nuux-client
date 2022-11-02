@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loading">
     <auth-login v-if="!isAuthenticated" />
-    <Welcome v-else />
+    <home v-else />
   </div>
 </template>
 
