@@ -127,7 +127,6 @@ export default {
           data: this.loginData
         })
         .then((response) => {
-          console.log(response)
           if (response.status === 200) {
             this.message = response.data.message
             this.showMessage = true
