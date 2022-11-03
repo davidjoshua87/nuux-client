@@ -51,10 +51,10 @@ export default {
           required: true,
           type: 'Bearer'
         },
-        user: {
-          property: 'user',
-          autoFetch: true
-        },
+        // user: {
+        //   property: 'user',
+        //   autoFetch: true
+        // },
         //      refreshToken: {  // it sends request automatically when the access token expires, and its expire time has set on the Back-end and does not need to we set it here, because is useless
         //        property: "refresh_token",
         //        data: "refresh_token",
@@ -63,7 +63,7 @@ export default {
           login: { url: '/api/user/signin', method: 'post' },
           //        refresh: { url: "/api/auth/refresh-token", method: "post" },
           logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
-          user: { url: '/api', method: 'get' }
+          api: { url: '/api', method: 'get' }
         }
       }
     }

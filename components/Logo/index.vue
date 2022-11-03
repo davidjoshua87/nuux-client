@@ -2,7 +2,7 @@
   <img
     class="mux-logo"
     alt="Vuetify Logo"
-    src="~/assets/images/logo-mux.svg"
+    src="/logo-mux.svg"
   >
 </template>
 

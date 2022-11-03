@@ -7,7 +7,7 @@
             <div>
               <div class="d-flex justify-center ma-4">
                 <div class="mr-2">
-                  <img src="~/assets/images/logo-mux.png" height="25">
+                  <img src="/logo-mux.png" height="25">
                 </div>
                 <div class="v-card-title font-weight-semibold text-h5 text-uppercase">
                   Mux

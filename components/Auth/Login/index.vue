@@ -7,7 +7,7 @@
             <div>
               <div class="d-flex justify-center ma-4">
                 <div class="mr-2">
-                  <img src="~/assets/images/logo-mux.png" height="25">
+                  <img src="/logo-mux.png" height="25">
                 </div>
                 <div class="v-card-title font-weight-semibold text-h5 text-uppercase">
                   Mux
@@ -127,12 +127,13 @@ export default {
           data: this.loginData
         })
         .then((response) => {
+          console.log(response)
           if (response.status === 200) {
             this.message = response.data.message
             this.showMessage = true
             this.loading = false
             setTimeout(() => {
-              this.$router.push('/home')
+              this.$router.push('/subscription')
               this.showMessage = false
               this.showCard = true
             }, 2000)
