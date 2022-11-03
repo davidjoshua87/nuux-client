@@ -1,85 +1,87 @@
 <template>
-  <div>
-    <v-row justify="center" align="center">
-      <v-col cols="12" sm="8" md="6">
-        <v-card v-if="showCard" elevation="18" class="logo pa-4 ma-lg-4 ma-md-2 d-flex align-center justify-center">
-          <div>
-            <div class="d-flex justify-center ma-4">
-              <div class="mr-2">
-                <img src="~/assets/images/logo-mux.png" height="25">
+  <div class="bg-image d-flex align-center justify-center">
+    <v-container>
+      <v-row justify="center" align="center">
+        <v-col cols="12" sm="8" md="6">
+          <v-card v-if="showCard" elevation="18" class="logo pa-4 ma-lg-4 ma-md-2 d-flex align-center justify-center">
+            <div>
+              <div class="d-flex justify-center ma-4">
+                <div class="mr-2">
+                  <img src="~/assets/images/logo-mux.png" height="25">
+                </div>
+                <div class="v-card-title font-weight-semibold text-h5 text-uppercase">
+                  Mux
+                </div>
               </div>
-              <div class="v-card-title font-weight-semibold text-h5 text-uppercase">
-                Mux
+              <div class="v-card-text pt-2">
+                <h5 class="text-h5 font-weight-semibold mb-4">
+                  Adventure starts here 🚀
+                </h5>
+                <p class="mb-4">
+                  Make your life relaxing and fun!
+                </p>
+              </div>
+              <v-form ref="form" v-model="valid" autocomplete="off" lazy-validation>
+                <v-text-field
+                  v-model="registerData.fullname"
+                  autocomplete="off"
+                  :counter="25"
+                  :rules="nameRules"
+                  label="Fullname"
+                  required
+                />
+                <v-text-field
+                  v-model="registerData.email"
+                  autocomplete="off"
+                  :rules="emailRules"
+                  name="input-email"
+                  label="Email"
+                  required
+                />
+                <v-text-field
+                  v-model="registerData.password"
+                  autocomplete="off"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  :rules="passwordRules"
+                  :type="showPassword ? 'text' : 'password'"
+                  name="input-password"
+                  label="Password"
+                  @click:append="showPassword = !showPassword"
+                />
+                <v-btn :disabled="!valid" color="success" class="my-2" width="100%" @click="register">
+                  Register
+                </v-btn>
+              </v-form>
+              <div class="v-col v-col-12 text-center text-base ma-4">
+                <span>Already have an account?</span>
+                <v-btn
+                  to="/auth/login"
+                  plain
+                  router
+                  exact
+                  style="text-transform:capitalize;"
+                >
+                  <a class="text-primary ms-2">  Sign in instead </a>
+                </v-btn>
               </div>
             </div>
-            <div class="v-card-text pt-2">
-              <h5 class="text-h5 font-weight-semibold mb-4">
-                Adventure starts here 🚀
-              </h5>
-              <p class="mb-4">
-                Make your life relaxing and fun!
-              </p>
-            </div>
-            <v-form ref="form" v-model="valid" autocomplete="off" lazy-validation>
-              <v-text-field
-                v-model="registerData.fullname"
-                autocomplete="off"
-                :counter="25"
-                :rules="nameRules"
-                label="Fullname"
-                required
-              />
-              <v-text-field
-                v-model="registerData.email"
-                autocomplete="off"
-                :rules="emailRules"
-                name="input-email"
-                label="Email"
-                required
-              />
-              <v-text-field
-                v-model="registerData.password"
-                autocomplete="off"
-                :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                :rules="passwordRules"
-                :type="showPassword ? 'text' : 'password'"
-                name="input-password"
-                label="Password"
-                @click:append="showPassword = !showPassword"
-              />
-              <v-btn :disabled="!valid" color="success" class="my-2" width="100%" @click="register">
-                Register
-              </v-btn>
-            </v-form>
-            <div class="v-col v-col-12 text-center text-base ma-4">
-              <span>Already have an account?</span>
-              <v-btn
-                to="/auth/login"
-                plain
-                router
-                exact
-                style="text-transform:capitalize;"
-              >
-                <a class="text-primary ms-2">  Sign in instead </a>
-              </v-btn>
-            </div>
-          </div>
-        </v-card>
+          </v-card>
 
-        <v-row class="py-4 d-flex justify-center">
-          <v-alert v-if="showMessage" transition="scale-transition" type="success">
-            <strong>{{ message }}</strong>
-          </v-alert>
-          <v-alert v-if="showError" transition="scale-transition" type="error">
-            <strong>{{ message }}</strong>
-          </v-alert>
-        </v-row>
+          <v-row class="py-4 d-flex justify-center">
+            <v-alert v-if="showMessage" transition="scale-transition" type="success">
+              <strong>{{ message }}</strong>
+            </v-alert>
+            <v-alert v-if="showError" transition="scale-transition" type="error">
+              <strong>{{ message }}</strong>
+            </v-alert>
+          </v-row>
 
-        <v-row class="py-4 d-flex justify-center">
-          <v-progress-circular v-if="loading" :size="70" :width="7" color="white" indeterminate />
-        </v-row>
-      </v-col>
-    </v-row>
+          <v-row class="py-4 d-flex justify-center">
+            <v-progress-circular v-if="loading" :size="70" :width="7" color="white" indeterminate />
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -221,6 +223,15 @@ export default {
 </script>
 
 <style>
+.bg-image {
+  background-image: url("~assets/images/bg-image-login.png");
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position: 0% 0%;
+  background-size: cover;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

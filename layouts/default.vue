@@ -1,10 +1,10 @@
 <template>
   <v-app dark>
     <navbar />
-    <v-main class="bg-image">
-      <v-container>
-        <Nuxt />
-      </v-container>
+    <v-main class="main">
+      <!-- <v-container> -->
+      <Nuxt />
+      <!-- </v-container> -->
     </v-main>
     <footer-section />
   </v-app>
@@ -17,11 +17,14 @@ export default {
 </script>
 
 <style>
-.bg-image {
+.main {
+  padding: 0 !important;
+}
+/* .bg-image {
   background-image: url("~assets/images/bg-image-login.png");
   width: 100%;
   background-repeat: no-repeat;
   background-position: 0% 0%;
   background-size: cover;
-}
+} */
 </style>

@@ -58,7 +58,6 @@
     </v-navigation-drawer>
 
     <v-app-bar
-      absolute
       :clipped-left="clipped"
       fixed
       app
