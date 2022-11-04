@@ -67,38 +67,15 @@
         to="/home"
         router
         exact
-        @click="resetUrl"
       >
         <div>
-          <img src="~/assets/images/logo-mux.png">
+          <img src="/logo-mux.png">
         </div>
         <h1 class="font-weight-semibold leading-normal text-xl text-uppercase ml-2">
           {{ title }}
         </h1>
       </v-btn>
       <v-spacer />
-      <!-- <template v-if="!isAuthenticated">
-        <div v-if="isMenuLogin === true" class="mr-4">
-          <v-btn
-            to="/auth/login"
-            router
-            exact
-            @click="onCheckMenuLogin"
-          >
-            Login
-          </v-btn>
-        </div>
-        <div v-if="isMenuRegister === true" class="mr-4">
-          <v-btn
-            to="/auth/register"
-            router
-            exact
-            @click="onCheckMenuRegister"
-          >
-            Register
-          </v-btn>
-        </div>
-      </template> -->
       <template v-if="isAuthenticated">
         <div class="mr-4 ml-4">
           <v-btn
@@ -219,7 +196,6 @@ export default {
   mounted () {
     this.onResize()
     window.addEventListener('resize', this.onResize, { passive: true })
-    this.resetUrl()
   },
   methods: {
     logout () {
@@ -242,28 +218,6 @@ export default {
     onResize () {
       this.isMobile = window.innerWidth < 600
       this.isDesktop = window.innerWidth > 600
-    },
-    // onCheckMenuLogin () {
-    //   this.isMenuRegister = !this.isMenuRegister
-    //   this.isMenuLogin = !this.isMenuLogin
-    // },
-    // onCheckMenuRegister () {
-    //   this.isMenuRegister = !this.isMenuRegister
-    //   this.isMenuLogin = !this.isMenuLogin
-    // },
-    // onChangeMenu (title) {
-    //   if (title === 'Login') {
-    //     this.isMenuRegister = true
-    //     this.isMenuLogin = false
-    //   } else {
-    //     this.isMenuRegister = false
-    //     this.isMenuLogin = true
-    //   }
-    // },
-    resetUrl () {
-      if (window.location.href !== '/home') {
-        this.$router.push('/')
-      }
     }
   }
 }
