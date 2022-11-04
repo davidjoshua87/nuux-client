@@ -103,6 +103,16 @@
         <div class="mr-4 ml-4">
           <v-btn
             v-if="isDesktop"
+            to="/music-search"
+            router
+            exact
+          >
+            Music Search
+          </v-btn>
+        </div>
+        <div class="mr-4 ml-4">
+          <v-btn
+            v-if="isDesktop"
             to="/profile"
             router
             exact
@@ -187,6 +197,12 @@ export default {
           title: 'Register',
           to: '/auth/register',
           isAuth: false
+        },
+        {
+          icon: 'mdi-music',
+          title: 'Music-Search',
+          to: '/music-search',
+          isAuth: true
         }
       ]
     }
