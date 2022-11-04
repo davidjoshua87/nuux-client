@@ -110,6 +110,11 @@ export default {
       passwordRules: [v => !!v || 'Password is required']
     }
   },
+  computed: {
+    dataUser () {
+      return this.$store.getters.getUserInfo
+    }
+  },
   mounted () {
     this.$refs.form.reset()
     this.checkCard()
@@ -132,7 +137,12 @@ export default {
             this.showMessage = true
             this.loading = false
             setTimeout(() => {
-              this.$router.push('/subscription')
+              if (this.dataUser.subscription === null) {
+                this.$router.push('/subscription')
+              } else {
+                this.$router.push('/home')
+              }
+
               this.showMessage = false
               this.showCard = true
             }, 2000)

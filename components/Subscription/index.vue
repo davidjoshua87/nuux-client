@@ -3,9 +3,9 @@
     <v-container>
       <v-row justify="center" align="center" class="d-flex">
         <v-col v-for="(item, i) in items" :key="i" cols="12" md="4">
-          <v-item-group>
+          <v-item-group v-if="showCard === true">
             <v-item>
-              <v-card class="mx-auto my-6" max-width="320">
+              <v-card id="item._id" class="mx-auto my-6" max-width="320">
                 <img width="100%" height="320" :src="item.link">
 
                 <v-card-title>{{ item.title }}</v-card-title>
@@ -30,7 +30,7 @@
                     rounded
                     text
                     color="red lighten-2"
-                    @click="subscribe"
+                    @click="subscribe(item._id)"
                   >
                     Subscribe
                   </v-btn>
@@ -39,6 +39,28 @@
             </v-item>
           </v-item-group>
         </v-col>
+        <v-row class="py-4 d-flex justify-center">
+          <v-alert
+            v-if="showMessage"
+            transition="scale-transition"
+            type="success"
+          >
+            <strong>{{ message }}</strong>
+          </v-alert>
+          <v-alert v-if="showError" transition="scale-transition" type="error">
+            <strong>{{ message }}</strong>
+          </v-alert>
+        </v-row>
+
+        <v-row class="py-4 d-flex justify-center">
+          <v-progress-circular
+            v-if="loading"
+            :size="70"
+            :width="7"
+            color="white"
+            indeterminate
+          />
+        </v-row>
       </v-row>
     </v-container>
   </div>
@@ -49,6 +71,11 @@ export default {
   name: 'SubscriptionComponent',
   data () {
     return {
+      loading: false,
+      showCard: true,
+      showMessage: false,
+      showError: false,
+      message: '',
       items: [
         {
           _id: 1,
@@ -77,9 +104,49 @@ export default {
       ]
     }
   },
-  mounted () {},
+  computed: {
+    dataUser () {
+      return this.$store.getters.getUserInfo
+    },
+    isLoading () {
+      return this.$store.state.loading
+    }
+  },
+  mounted () {
+    console.log(this.isLoading)
+  },
   methods: {
-    subscribe () {}
+    async subscribe (id) {
+      this.loading = true
+      this.showCard = false
+
+      await this.$axios.$put(`/api/user/edit/${this.dataUser.id}`, {
+        subscription: id
+      })
+        .then((response) => {
+          if (response.message === 'Succeed To Update User') {
+            this.message = response.message
+            this.showMessage = true
+            this.loading = false
+            setTimeout(() => {
+              this.$router.push('/home')
+              this.showMessage = false
+              this.showCard = true
+            }, 2000)
+          }
+        }).catch((error) => {
+          if (error.response) {
+            this.message = error.response.data.message
+            this.showError = true
+            this.loading = false
+            setTimeout(() => {
+              this.showError = false
+              this.$router.push('/subscription')
+              this.$refs.form.reset()
+            }, 2000)
+          }
+        })
+    }
   }
 }
 </script>
