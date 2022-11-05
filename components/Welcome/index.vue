@@ -29,7 +29,7 @@ export default {
 
 <style>
 .bg-image {
-  background-image: url("~assets/images/bg-image-login.png");
+  background-image: url("/bg-image-login.png");
   width: 100%;
   height: 100%;
   background-repeat: no-repeat;
