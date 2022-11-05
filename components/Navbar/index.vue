@@ -64,7 +64,7 @@
     >
       <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" />
       <v-btn
-        :to="dataUser.subscription === null ? '/subscription' : '/home'"
+        :to="linkMenu === null ? '/subscription' : '/home'"
         router
         exact
       >
@@ -145,7 +145,7 @@ export default {
         {
           icon: 'mdi-home',
           title: 'Home',
-          to: `${this.linkMenu == null ? '/subscription' : '/home'}`,
+          to: `${this.linkMenu === null ? '/subscription' : '/home'}`,
           isAuth: true
         },
         {
@@ -209,8 +209,10 @@ export default {
       this.isDesktop = window.innerWidth > 600
     },
     getLink () {
-      this.linkMenu = this.$store.getters.getUserInfo.subscription
-      return this.linkMenu
+      if (this.$store.getters.getUserInfo !== null) {
+        this.linkMenu = this.$store.getters.getUserInfo.subscription
+        return this.linkMenu
+      }
     }
   }
 }

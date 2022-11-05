@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center justify-center my-6">
+  <div class="bg-image-subscribe d-flex align-center justify-center my-6">
     <v-container>
       <v-row justify="center" align="center" class="d-flex">
         <v-col v-for="(item, i) in items" :key="i" cols="12" md="4">
@@ -151,4 +151,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.bg-image-subscribe {
+  background-image: url("/bg-image-login.png");
+  width: 100%;
+  height: auto;
+  background-repeat: no-repeat;
+  background-position: 0% 0%;
+  background-size: cover;
+}
+</style>

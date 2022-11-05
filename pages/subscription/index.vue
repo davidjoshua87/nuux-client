@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-image-subscribe">
+  <div>
     <subscription />
   </div>
 </template>
@@ -10,13 +10,4 @@ export default {
 }
 </script>
 
-<style>
-.bg-image-subscribe {
-  background-image: url("/bg-image-login.png");
-  width: 100%;
-  height: auto;
-  background-repeat: no-repeat;
-  background-position: 0% 0%;
-  background-size: cover;
-}
-</style>
+<style></style>
