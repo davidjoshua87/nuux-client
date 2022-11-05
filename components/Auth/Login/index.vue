@@ -145,7 +145,7 @@ export default {
 
               this.showMessage = false
               this.showCard = true
-            }, 2000)
+            }, 100)
           }
         })
         .catch((error) => {
@@ -158,7 +158,7 @@ export default {
                 this.showError = false
                 this.$router.push('/auth/login')
                 this.$refs.form.reset()
-              }, 2000)
+              }, 100)
             } else {
               this.message = error.response.data.message
               this.showError = true
@@ -167,7 +167,7 @@ export default {
                 this.showError = false
                 this.$router.push('/auth/login')
                 this.$refs.form.reset()
-              }, 2000)
+              }, 100)
             }
           }
         })

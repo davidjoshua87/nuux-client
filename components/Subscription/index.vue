@@ -120,7 +120,7 @@ export default {
       this.loading = true
       this.showCard = false
 
-      await this.$axios.$put(`/api/user/edit/${this.dataUser.id}`, {
+      await this.$axios.$put(`/api/user/edit/${this.dataUser.ids}`, {
         subscription: id
       })
         .then((response) => {
@@ -132,19 +132,16 @@ export default {
               this.$router.push('/home')
               this.showMessage = false
               this.showCard = true
-            }, 2000)
+            }, 100)
           }
         }).catch((error) => {
-          if (error.response) {
-            this.message = error.response.data.message
-            this.showError = true
-            this.loading = false
-            setTimeout(() => {
-              this.showError = false
-              this.$router.push('/subscription')
-              this.$refs.form.reset()
-            }, 2000)
-          }
+          this.message = error.message
+          this.showError = true
+          this.loading = false
+          setTimeout(() => {
+            this.showError = false
+            this.$router.push('/subscription')
+          }, 100)
         })
     }
   }
