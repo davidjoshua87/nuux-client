@@ -76,7 +76,7 @@
         <div class="mr-4 ml-4">
           <v-btn
             v-if="isDesktop"
-            to="/profile"
+            to="/account"
             router
             exact
           >
@@ -156,7 +156,7 @@ export default {
         {
           icon: 'mdi-account',
           title: 'Profile',
-          to: '/profile',
+          to: '/account',
           isAuth: true,
           isSubscribe: null
         },

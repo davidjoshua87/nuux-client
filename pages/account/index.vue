@@ -1,6 +1,6 @@
 <template>
   <div>
-    <profile />
+    <account />
   </div>
 </template>
 
