@@ -3,7 +3,7 @@
     <v-container>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="8" md="6">
-          <v-card v-if="showCard" elevation="18" class="logo pa-4 ma-lg-4 ma-md-2 d-flex align-center justify-center">
+          <v-card v-if="showCard" elevation="18" class="pa-4 ma-lg-4 ma-md-2 d-flex align-center justify-center">
             <div>
               <div class="d-flex justify-center ma-4">
                 <div class="mr-2">

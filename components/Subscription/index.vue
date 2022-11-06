@@ -6,14 +6,20 @@
           <v-item-group v-if="showCard === true">
             <v-item>
               <v-card id="item._id" class="mx-auto my-6" max-width="320">
-                <img width="100%" height="320" :src="item.link">
+                <img width="100%" height="300" :src="item.link">
 
-                <v-card-title>{{ item.title }}</v-card-title>
+                <v-card-title>
+                  {{ item.title }}
+                  <v-spacer />
+                  <span class="ml-2">
+                    <div>{{ item.currency }} {{ item.price }}</div>
+                  </span>
+                </v-card-title>
 
                 <v-divider class="mx-4" />
 
                 <v-card-text>
-                  <div class="my-4 text-subtitle-1">
+                  <div class="mb-2 text-subtitle-1">
                     {{ item.subtitle }}
                   </div>
 
@@ -80,26 +86,32 @@ export default {
         {
           _id: 1,
           link: '/image-subscribe.png',
-          title: 'Packet Subscribe 1',
+          title: 'Packet 1',
+          currency: 'IDR',
+          price: '35.000',
           subtitle: 'Subscribe for 1 month',
           description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         },
         {
           _id: 6,
           link: '/image-subscribe.png',
-          title: 'Packet Subscribe 6',
+          title: 'Packet 6',
+          currency: 'IDR',
+          price: '199.000',
           subtitle: 'Subscribe for 6 month',
           description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         },
         {
           _id: 12,
           link: '/image-subscribe.png',
-          title: 'Packet Subscribe 12',
+          title: 'Packet 12',
+          currency: 'IDR',
+          price: '399.000',
           subtitle: 'Subscribe for 1 year',
           description:
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         }
       ]
     }

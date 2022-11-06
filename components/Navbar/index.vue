@@ -80,7 +80,7 @@
             router
             exact
           >
-            Profile
+            My Account
           </v-btn>
         </div>
         <div class="mr-4">
@@ -155,7 +155,7 @@ export default {
         },
         {
           icon: 'mdi-account',
-          title: 'Profile',
+          title: 'My Account',
           to: '/account',
           isAuth: true,
           isSubscribe: null

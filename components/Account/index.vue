@@ -1,12 +1,13 @@
 <template>
-  <div class="bg-image-accoun d-flex align-center justify-center">
+  <div class="bg-image-account d-flex align-center justify-center">
     <v-container>
-      <v-row>
+      <v-row class="mt-lg-4" style="margin-top: 5px;">
         <v-col cols="12">
-          <v-card v-if="showCard === true" elevation="18" class="row logo pa-4 ma-lg-4 ma-md-2">
+          <!-- account image -->
+          <v-card v-if="showCard === true" elevation="18" class="row pa-4 ma-lg-4 ma-md-2" style="margin: 12px 0px;">
             <div>
               <h2>
-                Account Details
+                Account Image
               </h2>
             </div>
 
@@ -27,7 +28,7 @@
                   />
                 </v-responsive>
               </v-avatar>
-              <form class="d-flex flex-column justify-center gap-5">
+              <v-form class="d-flex flex-column justify-center gap-5">
                 <div class="d-flex flex-wrap gap-2">
                   <v-btn
                     elevation="6"
@@ -69,15 +70,22 @@
                 <p class="text-body-1 mb-0">
                   Allowed JPG, GIF or PNG. Max size of 800K
                 </p>
-              </form>
+              </v-form>
             </v-card-text>
-
+          </v-card>
+          <!-- account information -->
+          <v-card v-if="showCard === true" elevation="18" class="row pa-4 ma-lg-4 ma-md-2" style="margin: 12px 0px;">
+            <div>
+              <h2>
+                Account Information
+              </h2>
+            </div>
             <v-card-text>
               <v-form class="mt-6">
                 <v-row>
                   <v-col cols="12" sm="8" md="6">
                     <v-text-field
-                      v-model="registerData.fullname"
+                      v-model="userData.fullname"
                       autocomplete="off"
                       :counter="25"
                       :rules="nameRules"
@@ -87,7 +95,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-text-field
-                      v-model="registerData.email"
+                      v-model="userData.email"
                       autocomplete="off"
                       :rules="emailRules"
                       name="input-email"
@@ -97,7 +105,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-text-field
-                      v-model="registerData.phoneNumber"
+                      v-model="userData.phoneNumber"
                       autocomplete="off"
                       :rules="phoneRules"
                       :counter="12"
@@ -108,7 +116,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-text-field
-                      v-model="registerData.address"
+                      v-model="userData.address"
                       autocomplete="off"
                       :counter="50"
                       :rules="addressRules"
@@ -118,7 +126,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-select
-                      v-model="registerData.provice"
+                      v-model="userData.provice"
                       :items="optProvinces"
                       autocomplete="off"
                       :rules="proviceRules"
@@ -128,7 +136,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-text-field
-                      v-model="registerData.zipCode"
+                      v-model="userData.zipCode"
                       autocomplete="off"
                       :rules="zipcodeRules"
                       :counter="5"
@@ -138,7 +146,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-select
-                      v-model="registerData.country"
+                      v-model="userData.country"
                       :items="optCountries"
                       autocomplete="off"
                       :rules="countryRules"
@@ -148,7 +156,7 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-select
-                      v-model="registerData.currency"
+                      v-model="userData.currency"
                       :items="optCurrency"
                       autocomplete="off"
                       :rules="currencyRules"
@@ -183,6 +191,222 @@
               </v-form>
             </v-card-text>
           </v-card>
+          <!-- change password -->
+          <v-card v-if="showCard === true" elevation="18" class="row pa-4 ma-lg-4 ma-md-2" style="margin: 12px 0px;">
+            <div>
+              <h2>
+                Change Password
+              </h2>
+            </div>
+            <v-card-text>
+              <v-form class="mt-6">
+                <v-row class="mb-3">
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      v-model="userPassword.currentPassword"
+                      autocomplete="off"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="passwordRules"
+                      :type="showPassword ? 'text' : 'password'"
+                      name="input-current-password"
+                      label="Current Password"
+                      @click:append="showPassword = !showPassword"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      v-model="userPassword.newPassword"
+                      autocomplete="off"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="passwordRules"
+                      :type="showPassword ? 'text' : 'password'"
+                      name="input-new-password"
+                      label="New Password"
+                      @click:append="showPassword = !showPassword"
+                    />
+                  </v-col>
+                  <v-col cols="12" md="6">
+                    <v-text-field
+                      v-model="userPassword.confirmPassword"
+                      autocomplete="off"
+                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="passwordRules"
+                      :type="showPassword ? 'text' : 'password'"
+                      name="input-confirm-password"
+                      label="Confirm Password"
+                      @click:append="showPassword = !showPassword"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="8" md="6">
+                    <p class="text-base font-weight-medium mt-2">
+                      Password Requirements:
+                    </p>
+                    <ul class="d-flex flex-column gap-y-3 pl-0">
+                      <li class="d-flex">
+                        <v-checkbox
+                          v-model="checkPassword1"
+                          label="Minimum 8 characters long - the more, the better"
+                          color="primary"
+                          value="primary"
+                          dense
+                          size="sm"
+                          disabled
+                          hide-details
+                        />
+                      </li>
+                      <li class="d-flex">
+                        <v-checkbox
+                          v-model="checkPassword2"
+                          label="At least one lowercase character"
+                          color="primary"
+                          value="primary"
+                          dense
+                          size="sm"
+                          disabled
+                          hide-details
+                        />
+                      </li>
+                      <li class="d-flex">
+                        <v-checkbox
+                          v-model="checkPassword3"
+                          label="At least one uppercase character"
+                          color="primary"
+                          value="primary"
+                          dense
+                          size="sm"
+                          disabled
+                          hide-details
+                        />
+                      </li>
+                      <li class="d-flex">
+                        <v-checkbox
+                          v-model="checkPassword4"
+                          label="At least one number, symbol, or whitespace character"
+                          color="primary"
+                          value="primary"
+                          dense
+                          size="sm"
+                          disabled
+                          hide-details
+                        />
+                      </li>
+                    </ul>
+                  </v-col>
+                  <v-col cols="12" class="d-flex flex-wrap gap-4">
+                    <v-btn
+                      density="default"
+                      medium
+                      type="button"
+                      class="primary mr-2"
+                    >
+                      <span class="v-btn__overlay" />
+                      <span class="v-btn__underlay" />
+                      <span
+                        class="v-btn__content"
+                      >
+                        save changes
+                      </span>
+                    </v-btn>
+                    <v-btn density="default" medium type="reset" class="text-secondary grey">
+                      <span class="v-btn__overlay" />
+                      <span class="v-btn__underlay" />
+                      <span class="v-btn__content">
+                        Reset
+                      </span>
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-card-text>
+          </v-card>
+          <!-- change plan subscribe -->
+          <v-card v-if="showCard === true" elevation="18" class="row pa-4 ma-lg-4 ma-md-2" style="margin: 12px 0px;">
+            <div>
+              <h2>
+                Change Plan Subscribe
+              </h2>
+            </div>
+            <v-card-text>
+              <v-alert
+                density="comfortable"
+                class="grey mb-4"
+                role="alert"
+              >
+                <span class="v-alert__underlay" />
+                <div class="v-alert__content">
+                  <div class="v-alert-title mb-1">
+                    Are you sure you want to change your plan subscribe?
+                  </div>
+                  <p class="mb-0">
+                    Please click the button and select the desired packet subscription.
+                  </p>
+                </div>
+              </v-alert>
+              <v-btn
+                density="default"
+                medium
+                type="button"
+                class="primary mt-3"
+              >
+                <span class="v-btn__overlay" />
+                <span class="v-btn__underlay" />
+                <span class="v-btn__content">
+                  Change Plan Subscribe
+                </span>
+              </v-btn>
+            </v-card-text>
+          </v-card>
+          <!-- delete account -->
+          <v-card v-if="showCard === true" elevation="18" class="row pa-4 ma-lg-4 ma-md-2" style="margin: 12px 0px;">
+            <div>
+              <h2>
+                Delete Account
+              </h2>
+            </div>
+            <v-card-text>
+              <v-alert
+                density="comfortable"
+                class="warning mb-4"
+                role="alert"
+              >
+                <span class="v-alert__underlay" />
+                <div class="v-alert__content">
+                  <div class="v-alert-title mb-1">
+                    Are you sure you want to delete your account?
+                  </div>
+                  <p class="mb-0">
+                    Once you delete your account, there is no going back. Please be certain.
+                  </p>
+                </div>
+              </v-alert>
+              <div>
+                <v-checkbox
+                  v-model="confirmDelete"
+                  label="I confirm my account deactivation"
+                  color="primary"
+                  value="primary"
+                  hide-details
+                />
+              </div>
+              <v-btn
+                density="default"
+                medium
+                type="button"
+                class="error mt-3"
+                :disabled="!confirmDelete"
+              >
+                <span class="v-btn__overlay" />
+                <span class="v-btn__underlay" />
+                <span class="v-btn__content">
+                  Delete Account
+                </span>
+              </v-btn>
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -200,8 +424,13 @@ export default {
       showCard: true,
       showMessage: false,
       showError: false,
+      confirmDelete: false,
+      checkPassword1: true,
+      checkPassword2: false,
+      checkPassword3: false,
+      checkPassword4: false,
       message: '',
-      registerData: {
+      userData: {
         fullname: '',
         email: '',
         password: '',
@@ -211,6 +440,11 @@ export default {
         zipCode: '',
         country: '',
         currency: ''
+      },
+      userPassword: {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
       },
       optProvinces: ['DKI Jakarta', 'Sumatera Utara', 'DIY Yogyakarta', 'Bali'],
       optCountries: ['Indonesia'],
@@ -222,9 +456,6 @@ export default {
       emailRules: [
         v => !!v || 'Email is required',
         v => /.+@.+\..+/.test(v) || 'Email must be valid'
-      ],
-      passwordRules: [
-        v => !!v || 'Password is required'
       ],
       phoneRules: [
         v => !!v || 'Phone Number is required',
@@ -246,6 +477,9 @@ export default {
       ],
       currencyRules: [
         v => !!v || 'Currency is required'
+      ],
+      passwordRules: [
+        v => !!v || 'Password is required'
       ]
     }
   }
