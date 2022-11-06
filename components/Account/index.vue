@@ -156,11 +156,11 @@
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
                     <v-select
-                      v-model="userData.currency"
-                      :items="optCurrency"
+                      v-model="userData.language"
+                      :items="optLanguage"
                       autocomplete="off"
-                      :rules="currencyRules"
-                      label="Currency"
+                      :rules="languageRules"
+                      label="Language"
                       required
                     />
                   </v-col>
@@ -439,7 +439,7 @@ export default {
         provice: '',
         zipCode: '',
         country: '',
-        currency: ''
+        language: ''
       },
       userPassword: {
         currentPassword: '',
@@ -448,7 +448,7 @@ export default {
       },
       optProvinces: ['DKI Jakarta', 'Sumatera Utara', 'DIY Yogyakarta', 'Bali'],
       optCountries: ['Indonesia'],
-      optCurrency: ['IDR'],
+      optLanguage: ['English', 'Indonesia'],
       nameRules: [
         v => !!v || 'Fullname is required',
         v => (v && v.length <= 25) || 'Fullname must be less than 25 characters'
@@ -475,8 +475,8 @@ export default {
       countryRules: [
         v => !!v || 'Country is required'
       ],
-      currencyRules: [
-        v => !!v || 'Currency is required'
+      languageRules: [
+        v => !!v || 'Language is required'
       ],
       passwordRules: [
         v => !!v || 'Password is required'
