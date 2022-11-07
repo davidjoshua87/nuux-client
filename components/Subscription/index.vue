@@ -85,7 +85,7 @@ export default {
       user: null,
       items: [
         {
-          _id: 1,
+          _id: '1',
           link: '/image-subscribe.png',
           title: 'Packet 1',
           currency: 'IDR',
@@ -95,7 +95,7 @@ export default {
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         },
         {
-          _id: 6,
+          _id: '6',
           link: '/image-subscribe.png',
           title: 'Packet 6',
           currency: 'IDR',
@@ -105,7 +105,7 @@ export default {
             "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
         },
         {
-          _id: 12,
+          _id: '12',
           link: '/image-subscribe.png',
           title: 'Packet 12',
           currency: 'IDR',
@@ -167,8 +167,9 @@ export default {
             this.showError = true
             this.loading = false
             setTimeout(() => {
-              this.showError = false
               this.$router.push('/subscription')
+              this.showError = false
+              this.showCard = true
             }, 100)
           })
       }
@@ -181,7 +182,8 @@ export default {
 .bg-image-subscribe {
   background-image: url("/bg-image-login.png");
   width: 100%;
-  height: auto;
+  min-height: 100vh;
+  height: 100%;
   background-repeat: no-repeat;
   background-position: 0% 0%;
   background-size: cover;

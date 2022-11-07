@@ -160,8 +160,8 @@ export default {
               this.loading = false
               setTimeout(() => {
                 this.showError = false
-                this.$router.push('/auth/login')
-                this.$refs.form.reset()
+                window.location.href = '/auth/login'
+                this.resetForm()
               }, 100)
             } else {
               this.message = error.response.data.message
@@ -169,8 +169,8 @@ export default {
               this.loading = false
               setTimeout(() => {
                 this.showError = false
-                this.$router.push('/auth/login')
-                this.$refs.form.reset()
+                window.location.href = '/auth/login'
+                this.resetForm()
               }, 100)
             }
           }

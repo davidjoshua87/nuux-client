@@ -80,6 +80,7 @@
             to="/account"
             router
             exact
+            @click="getUpdateUser"
           >
             My Account
           </v-btn>

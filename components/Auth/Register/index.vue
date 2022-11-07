@@ -190,6 +190,9 @@ export default {
     }
   },
   computed: {
+    dataUser () {
+      return this.$store.getters.getUserInfo
+    },
     showButton () {
       return this.checkPassword()
     }
@@ -246,7 +249,11 @@ export default {
                       localStorage.setItem('message', this.message)
                       localStorage.setItem('showMessage', this.showMessage)
                       setTimeout(() => {
-                        this.$router.push('/home')
+                        if (this.dataUser.subscription === null) {
+                          this.$router.push('/subscription')
+                        } else {
+                          this.$router.push('/home')
+                        }
                         localStorage.removeItem('showCard')
                         localStorage.removeItem('loading')
                         localStorage.removeItem('message')
@@ -254,7 +261,7 @@ export default {
                         this.showMessage = false
                         this.showCard = true
                         this.loading = false
-                      }, 4000)
+                      }, 300)
                     }
                   })
                   .catch((error) => {
@@ -266,8 +273,8 @@ export default {
                         setTimeout(() => {
                           this.showError = false
                           this.$router.push('/auth/login')
-                          this.$refs.form.reset()
-                        }, 2000)
+                          this.resetForm()
+                        }, 100)
                       } else {
                         this.message = error.response.data.message
                         this.showError = true
@@ -275,13 +282,13 @@ export default {
                         setTimeout(() => {
                           this.showError = false
                           this.$router.push('/auth/login')
-                          this.$refs.form.reset()
-                        }, 2000)
+                          this.resetForm()
+                        }, 100)
                       }
                     }
                   })
-              }, 3000)
-            }, 2000)
+              }, 200)
+            }, 100)
           }
         })
         .catch((error) => {
@@ -292,9 +299,8 @@ export default {
               this.loading = false
               setTimeout(() => {
                 this.showError = false
-                // this.$router.push('/auth/register')
                 window.location.href = '/auth/register'
-                this.$refs.form.reset()
+                this.resetForm()
               }, 2000)
             } else {
               this.message = error.response.data.message
@@ -302,9 +308,8 @@ export default {
               this.loading = false
               setTimeout(() => {
                 this.showError = false
-                // this.$router.push('/auth/register')
                 window.location.href = '/auth/register'
-                this.$refs.form.reset()
+                this.resetForm()
               }, 2000)
             }
           }

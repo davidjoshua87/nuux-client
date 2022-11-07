@@ -2,11 +2,11 @@
   <div>
     <auth-login v-if="!isAuthenticated" />
     <div v-else>
-      <div v-if="!isSubscribe">
-        <welcome />
+      <div v-if="isSubscribe">
+        <subscription />
       </div>
       <div v-else>
-        <subscription />
+        <welcome />
       </div>
     </div>
   </div>
@@ -60,10 +60,10 @@ export default {
     },
     getIsSubscribe () {
       if (this.user !== null) {
-        if (this.user.subscription !== null) {
-          return false
-        } else {
+        if (this.user.subscription === null) {
           return true
+        } else {
+          return false
         }
       }
     }
