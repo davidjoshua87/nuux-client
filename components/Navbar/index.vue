@@ -86,7 +86,7 @@
           </v-btn>
         </div>
         <div class="mr-4">
-          <v-tooltip v-model="showMessage" left :color="colorTool">
+          <v-tooltip v-model="showMessage" bottom :color="colorTool">
             <template #activator="{ on, attrs }">
               <v-btn
                 router

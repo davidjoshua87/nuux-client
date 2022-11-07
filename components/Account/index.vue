@@ -1,9 +1,9 @@
 <template>
   <div class="bg-image-account d-flex align-center justify-center">
     <v-container>
-      <v-row class="mt-lg-4" style="margin-top: 5px">
+      <v-row class="mt-12" style="margin-top: 5px">
         <v-col cols="12">
-          <!-- account image -->
+          <!-- account avatar -->
           <v-card
             v-if="showCard === true"
             elevation="18"
@@ -26,44 +26,41 @@
                   <v-img
                     aspect-ratio="1"
                     contain
-                    src="/avatar-default.png"
+                    :src="linkAvatar"
                     alt="avatar"
                   />
                 </v-responsive>
               </v-avatar>
               <v-form class="d-flex flex-column justify-center gap-5">
                 <div class="d-flex flex-wrap gap-2">
-                  <v-btn
-                    elevation="6"
-                    density="default"
-                    medium
-                    class="primary mb-2 mr-2"
-                  >
-                    <span class="v-btn__overlay" />
-                    <span class="v-btn__underlay" />
-                    <span class="v-btn__content">
-                      <img class="mr-1" src="/upload-avatar.png">
-                      <span class="d-none d-sm-block"> Upload new photo </span>
-                    </span>
-                  </v-btn>
+                  <div class="group-btn-upload">
+                    <label for="upload-image" class="custom-file-upload" />
 
-                  <input
-                    type="file"
-                    name="file"
-                    accept=".jpeg,.png,.jpg,GIF"
-                    hidden=""
-                  >
+                    <v-btn
+                      elevation="6"
+                      density="default"
+                      medium
+                      class="btn-upload primary mb-2 mr-2"
+                    >
+                      <span class="v-btn__overlay" />
+                      <span class="v-btn__underlay" />
+                      <span class="v-btn__content">
+                        <img class="mr-1" src="/upload-avatar.png">
+                        <span class="d-none d-sm-block"> Upload new photo </span>
+                        <span class="d-md-none d-sm-block"> Upload </span>
+                      </span>
+                    </v-btn>
 
-                  <v-btn elevation="6" density="default" medium class="grey">
-                    <span class="v-btn__overlay" />
-                    <span class="v-btn__underlay" />
-                    <span class="v-btn__content">
-                      <img src="/reset-avatar.png">
-                      <span class="d-none d-sm-block"> Reset </span>
-                    </span>
-                  </v-btn>
+                    <input
+                      id="upload-image"
+                      type="file"
+                      name="file"
+                      accept=".jpeg,.png,.jpg,GIF"
+                      @change="postImageHandler"
+                    >
+                  </div>
                 </div>
-                <p class="text-body-1 mb-0">
+                <p class="text-body-1 mb-0" style="font-size: 9px">
                   Allowed JPG, GIF or PNG. Max size of 800K
                 </p>
               </v-form>
@@ -334,7 +331,8 @@
             </div>
             <v-card-text>
               <v-chip class="ma-2" color="white" primary outlined>
-                Your Subscribe Packet:  <span class="ml-1"><b>{{ textSubscribe }}</b></span>
+                Your Subscribe Packet:
+                <span class="ml-1"><b>{{ textSubscribe }}</b></span>
               </v-chip>
             </v-card-text>
             <v-card-text>
@@ -483,6 +481,8 @@ export default {
       validFormInfo: true,
       validFormPass: true,
       user: null,
+      image: null,
+      linkAvatar: '/avatar-default.png',
       showPassword: false,
       loading: false,
       showCard: true,
@@ -500,6 +500,7 @@ export default {
         fullname: '',
         email: '',
         password: '',
+        avatar: '',
         phoneNumber: '',
         address: '',
         province: '',
@@ -556,7 +557,9 @@ export default {
       ],
       newPasswordRules: [
         v => !!v || 'Password is required',
-        v => this.userPassword.currentPassword !== v || 'Password is the same as the old password',
+        v =>
+          this.userPassword.currentPassword !== v ||
+          'Password is the same as the old password',
         v => /[a-z]/g.test(v) || 'Password at least one lowercase character',
         v => /[A-Z]/g.test(v) || 'Password at least one uppercase character',
         v =>
@@ -603,6 +606,7 @@ export default {
         id: this.user._id,
         fullname: this.user.fullname,
         email: this.user.email,
+        avatar: this.user.avatar,
         phoneNumber: this.user.phoneNumber,
         address: this.user.address,
         province: this.user.province,
@@ -611,9 +615,14 @@ export default {
         language: this.user.language,
         subscription: this.user.subscription
       }
+
       if (this.userData.language === '') {
         this.dialogAlert = true
         this.textWarning = 'Please complete your data information!'
+      }
+
+      if (this.userData.avatar !== '') {
+        this.linkAvatar = this.userData.avatar
       }
 
       if (this.userData.subscription === null) {
@@ -777,6 +786,44 @@ export default {
             this.$router.push('/account')
           }, 100)
         })
+    },
+    async postImageHandler (e) {
+      this.image = e.target.files[0]
+
+      if (this.image !== null) {
+        this.loading = true
+        this.showCard = false
+        const formData = new FormData()
+        formData.append('image', this.image)
+
+        if (this.userData !== null) {
+          await this.$axios
+            .$put(`/api/user/upload/${this.userData.id}`, formData)
+            .then((response) => {
+              if (response.message === 'Succeed To Update User') {
+                this.message = response.message
+                this.showMessage = true
+                this.loading = false
+                this.getUpdateUser()
+                setTimeout(() => {
+                  this.$router.push('/account')
+                  this.showMessage = false
+                  this.showCard = true
+                }, 100)
+              }
+            })
+            .catch((error) => {
+              this.message = error.message
+              this.showError = true
+              this.loading = false
+              setTimeout(() => {
+                this.$router.push('/account')
+                this.showError = false
+                this.showCard = true
+              }, 100)
+            })
+        }
+      }
     }
   }
 }
@@ -791,5 +838,22 @@ export default {
   background-repeat: no-repeat;
   background-position: 0% 0%;
   background-size: cover;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.group-btn-upload {
+  position: relative;
+}
+
+.custom-file-upload {
+    z-index: 10;
+    position: absolute;
+    width: 96%;
+    height: 85%;
+    display: inline-block;
+    cursor: pointer;
 }
 </style>
