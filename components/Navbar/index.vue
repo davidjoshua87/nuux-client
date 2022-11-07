@@ -8,24 +8,13 @@
       fixed
       app
     >
-      <div
-        :absolute="!fixed"
-        app
-        class="d-flex align-center justify-center py-3"
-      >
+      <div :absolute="!fixed" app class="d-flex align-center justify-center py-3">
         <span>Mux v.{{ version }}</span>
       </div>
+      <!-- befor login -->
       <v-list v-if="!isAuthenticated">
-        <div
-          v-for="(item, i) in items"
-          :key="i"
-        >
-          <v-list-item
-            v-if="isAuthenticated === item.isAuth"
-            :to="item.to"
-            router
-            exact
-          >
+        <div v-for="(item, i) in items" :key="i">
+          <v-list-item v-if="item.isAuth === false" :to="item.to" router exact>
             <v-list-item-action>
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-action>
@@ -35,24 +24,31 @@
           </v-list-item>
         </div>
       </v-list>
+      <!-- after login -->
       <v-list v-else>
-        <div
-          v-for="(item, i) in items"
-          :key="i"
-        >
-          <v-list-item
-            v-if="isAuthenticated === item.isAuth"
-            :to="item.to"
-            router
-            exact
-          >
-            <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+        <div v-for="(item, i) in items" :key="i">
+          <div v-if="item.isAuth === true">
+            <div v-if="item.isSubscribe === isSubscribe">
+              <v-list-item :to="item.to" router exact>
+                <v-list-item-action>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+            <div v-if="item.isSubscribe === null">
+              <v-list-item :to="item.to" router exact>
+                <v-list-item-action>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </div>
+          </div>
         </div>
       </v-list>
     </v-navigation-drawer>
@@ -62,11 +58,12 @@
       fixed
       app
     >
-      <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" />
+      <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" @click="getUpdateUser" />
       <v-btn
-        to="/home"
+        :to="isSubscribe === true ? '/subscription' : '/home'"
         router
         exact
+        @click="getUpdateUser"
       >
         <div>
           <img src="/logo-mux.png">
@@ -90,11 +87,11 @@
         <div class="mr-4 ml-4">
           <v-btn
             v-if="isDesktop"
-            to="/profile"
+            to="/account"
             router
             exact
           >
-            Profile
+            My Account
           </v-btn>
         </div>
         <div class="mr-4">
@@ -139,6 +136,7 @@ export default {
       showMessage: false,
       showError: false,
       message: '',
+      linkMenu: '',
       isMobile: false,
       isDesktop: false,
       isMenuLogin: false,
@@ -150,18 +148,28 @@ export default {
       right: true,
       rightDrawer: false,
       title: 'Mux',
+      user: null,
       items: [
         {
           icon: 'mdi-home',
           title: 'Home',
           to: '/home',
-          isAuth: true
+          isAuth: true,
+          isSubscribe: false
+        },
+        {
+          icon: 'mdi-account-credit-card',
+          title: 'Subscribe',
+          to: '/subscription',
+          isAuth: true,
+          isSubscribe: true
         },
         {
           icon: 'mdi-account',
-          title: 'Profile',
-          to: '/profile',
-          isAuth: true
+          title: 'My Account',
+          to: '/account',
+          isAuth: true,
+          isSubscribe: null
         },
         {
           icon: 'mdi-login',
@@ -187,6 +195,12 @@ export default {
   computed: {
     isAuthenticated () {
       return this.$store.getters.isAuthenticated
+    },
+    dataUser () {
+      return this.$store.getters.getUserInfo
+    },
+    isSubscribe () {
+      return this.getIsSubscribe()
     }
   },
   beforeDestroy () {
@@ -196,6 +210,8 @@ export default {
   mounted () {
     this.onResize()
     window.addEventListener('resize', this.onResize, { passive: true })
+    this.getLink()
+    this.getUpdateUser()
   },
   methods: {
     logout () {
@@ -212,12 +228,41 @@ export default {
         setTimeout(() => {
           this.showMessage = false
           this.message = ''
-        }, 500)
-      }, 1000)
+        }, 100)
+      }, 300)
     },
     onResize () {
       this.isMobile = window.innerWidth < 600
       this.isDesktop = window.innerWidth > 600
+    },
+    getLink () {
+      if (this.$store.getters.getUserInfo !== null) {
+        this.linkMenu = this.$store.getters.getUserInfo.subscription
+        return this.linkMenu
+      }
+    },
+    async getUpdateUser () {
+      if (this.dataUser !== null) {
+        await this.$axios.$get(`/api/user/${this.dataUser.id}`)
+          .then((response) => {
+            if (response.message === 'Succeed Get User By Id') {
+              this.user = response.data
+            }
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error)
+            }
+          })
+      }
+    },
+    getIsSubscribe () {
+      if (this.user !== null) {
+        if (this.user.subscription === null) {
+          return true
+        } else {
+          return false
+        }
+      }
     }
   }
 }

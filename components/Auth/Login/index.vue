@@ -3,7 +3,7 @@
     <v-container>
       <v-row justify="center" align="center" class="d-flex">
         <v-col cols="12" sm="8" md="6">
-          <v-card v-if="showCard === true" elevation="18" class="logo pa-4 ma-lg-4 ma-md-2 d-flex align-center justify-center">
+          <v-card v-if="showCard === true" elevation="18" class="pa-4 ma-lg-4 ma-md-2 d-flex align-center justify-center">
             <div>
               <div class="d-flex justify-center ma-4">
                 <div class="mr-2">
@@ -110,14 +110,23 @@ export default {
       passwordRules: [v => !!v || 'Password is required']
     }
   },
+  computed: {
+    dataUser () {
+      return this.$store.getters.getUserInfo
+    }
+  },
   mounted () {
-    this.$refs.form.reset()
+    this.resetForm()
     this.checkCard()
     this.checkLoading()
     this.checkShowMsg()
     this.checkMessage()
   },
   methods: {
+    resetForm () {
+      this.loginData.email = ''
+      this.loginData.password = ' '
+    },
     async login () {
       this.loading = true
       this.showCard = false
@@ -132,10 +141,15 @@ export default {
             this.showMessage = true
             this.loading = false
             setTimeout(() => {
-              this.$router.push('/subscription')
+              if (this.dataUser.subscription === null) {
+                this.$router.push('/subscription')
+              } else {
+                this.$router.push('/home')
+              }
+
               this.showMessage = false
               this.showCard = true
-            }, 2000)
+            }, 100)
           }
         })
         .catch((error) => {
@@ -148,7 +162,7 @@ export default {
                 this.showError = false
                 this.$router.push('/auth/login')
                 this.$refs.form.reset()
-              }, 2000)
+              }, 100)
             } else {
               this.message = error.response.data.message
               this.showError = true
@@ -157,7 +171,7 @@ export default {
                 this.showError = false
                 this.$router.push('/auth/login')
                 this.$refs.form.reset()
-              }, 2000)
+              }, 100)
             }
           }
         })
@@ -196,7 +210,7 @@ export default {
 
 <style>
 .bg-image {
-  background-image: url("~assets/images/bg-image-login.png");
+  background-image: url("/bg-image-login.png");
   width: 100%;
   height: 100vh;
   background-repeat: no-repeat;
