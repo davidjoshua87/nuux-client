@@ -82,6 +82,7 @@ export default {
       showMessage: false,
       showError: false,
       message: '',
+      user: null,
       items: [
         {
           _id: 1,
@@ -125,36 +126,52 @@ export default {
     }
   },
   mounted () {
-    console.log(this.isLoading)
+    this.getUpdateUser()
   },
   methods: {
+    async getUpdateUser () {
+      if (this.dataUser !== null) {
+        await this.$axios.$get(`/api/user/${this.dataUser.id}`)
+          .then((response) => {
+            if (response.message === 'Succeed Get User By Id') {
+              this.user = response.data
+            }
+          }).catch((error) => {
+            if (error.response) {
+              console.log(error)
+            }
+          })
+      }
+    },
     async subscribe (id) {
       this.loading = true
       this.showCard = false
 
-      await this.$axios.$put(`/api/user/edit/${this.dataUser.ids}`, {
-        subscription: id
-      })
-        .then((response) => {
-          if (response.message === 'Succeed To Update User') {
-            this.message = response.message
-            this.showMessage = true
+      if (this.user !== null) {
+        await this.$axios.$put(`/api/user/edit/${this.user._id}`, {
+          subscription: id
+        })
+          .then((response) => {
+            if (response.message === 'Succeed To Update User') {
+              this.message = response.message
+              this.showMessage = true
+              this.loading = false
+              setTimeout(() => {
+                this.$router.push('/home')
+                this.showMessage = false
+                this.showCard = true
+              }, 100)
+            }
+          }).catch((error) => {
+            this.message = error.message
+            this.showError = true
             this.loading = false
             setTimeout(() => {
-              this.$router.push('/home')
-              this.showMessage = false
-              this.showCard = true
+              this.showError = false
+              this.$router.push('/subscription')
             }, 100)
-          }
-        }).catch((error) => {
-          this.message = error.message
-          this.showError = true
-          this.loading = false
-          setTimeout(() => {
-            this.showError = false
-            this.$router.push('/subscription')
-          }, 100)
-        })
+          })
+      }
     }
   }
 }

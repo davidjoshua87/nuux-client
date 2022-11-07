@@ -116,13 +116,17 @@ export default {
     }
   },
   mounted () {
-    this.$refs.form.reset()
+    this.resetForm()
     this.checkCard()
     this.checkLoading()
     this.checkShowMsg()
     this.checkMessage()
   },
   methods: {
+    resetForm () {
+      this.loginData.email = ''
+      this.loginData.password = ' '
+    },
     async login () {
       this.loading = true
       this.showCard = false

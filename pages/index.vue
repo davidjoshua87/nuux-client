@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     async getUpdateUser () {
-      if (this.dataUser.id !== null) {
+      if (this.dataUser !== null) {
         await this.$axios.$get(`/api/user/${this.dataUser.id}`)
           .then((response) => {
             if (response.message === 'Succeed Get User By Id') {

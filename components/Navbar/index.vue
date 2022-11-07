@@ -63,6 +63,7 @@
         :to="isSubscribe === true ? '/subscription' : '/home'"
         router
         exact
+        @click="getUpdateUser"
       >
         <div>
           <img src="/logo-mux.png">
@@ -225,7 +226,7 @@ export default {
       }
     },
     async getUpdateUser () {
-      if (this.dataUser.id !== null) {
+      if (this.dataUser !== null) {
         await this.$axios.$get(`/api/user/${this.dataUser.id}`)
           .then((response) => {
             if (response.message === 'Succeed Get User By Id') {
@@ -240,10 +241,10 @@ export default {
     },
     getIsSubscribe () {
       if (this.user !== null) {
-        if (this.user.subscription !== null) {
-          return false
-        } else {
+        if (this.user.subscription === null) {
           return true
+        } else {
+          return false
         }
       }
     }
