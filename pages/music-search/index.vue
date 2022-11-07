@@ -1,6 +1,6 @@
 <template>
   <div class="mt-12">
-    <musicSearch />
+    <music-search />
   </div>
 </template>
 

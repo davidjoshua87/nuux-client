@@ -17,7 +17,6 @@ export default {
   name: 'IndexPage',
   data () {
     return {
-      loading: false,
       user: null
     }
   },
@@ -30,18 +29,10 @@ export default {
     },
     isSubscribe () {
       return this.getIsSubscribe()
-    },
-    isLoading () {
-      const show = localStorage.getItem('loadingOut') === null ? false : localStorage.getItem('loadingOut')
-      return show
     }
   },
   mounted () {
     this.getUpdateUser()
-    this.loading = this.isLoading
-    setTimeout(() => {
-      this.loading = false
-    }, 2000)
   },
   methods: {
     async getUpdateUser () {

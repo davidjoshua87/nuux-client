@@ -77,16 +77,6 @@
         <div class="mr-4 ml-4">
           <v-btn
             v-if="isDesktop"
-            to="/music-search"
-            router
-            exact
-          >
-            Music Search
-          </v-btn>
-        </div>
-        <div class="mr-4 ml-4">
-          <v-btn
-            v-if="isDesktop"
             to="/account"
             router
             exact
@@ -96,33 +86,30 @@
           </v-btn>
         </div>
         <div class="mr-4">
-          <v-btn
-            router
-            exact
-            @click="logout"
-          >
-            Logout
-          </v-btn>
+          <v-tooltip v-model="showMessage" left :color="colorTool">
+            <template #activator="{ on, attrs }">
+              <v-btn
+                router
+                exact
+                v-bind="attrs"
+                :loading="loading"
+                :disabled="loading"
+                v-on="on"
+                @click="logout"
+              >
+                Logout
+                <template #loader>
+                  <span class="custom-loader">
+                    <v-icon light>mdi-cached</v-icon>
+                  </span>
+                </template>
+              </v-btn>
+            </template>
+            <span>{{ message }}</span>
+          </v-tooltip>
         </div>
       </template>
     </v-app-bar>
-
-    <div v-if="showMessage === true" class="void" />
-
-    <v-row class="py-4 d-flex justify-center">
-      <v-alert v-if="showMessage" transition="scale-transition" type="success">
-        <strong>{{ message }}</strong>
-      </v-alert>
-      <v-alert v-if="showError" transition="scale-transition" type="error">
-        <strong>{{ message }}</strong>
-      </v-alert>
-    </v-row>
-
-    <div v-if="loading" class="void" />
-
-    <v-row class="py-4 d-flex justify-center">
-      <v-progress-circular v-if="loading" :size="70" :width="7" color="white" indeterminate />
-    </v-row>
   </div>
 </template>
 
@@ -136,7 +123,8 @@ export default {
       loading: false,
       showMessage: false,
       showError: false,
-      message: '',
+      message: 'Logout',
+      colorTool: 'grey lighten-1',
       linkMenu: '',
       isMobile: false,
       isDesktop: false,
@@ -183,12 +171,6 @@ export default {
           title: 'Register',
           to: '/auth/register',
           isAuth: false
-        },
-        {
-          icon: 'mdi-music',
-          title: 'Music-Search',
-          to: '/music-search',
-          isAuth: true
         }
       ]
     }
@@ -217,20 +199,19 @@ export default {
   methods: {
     logout () {
       this.loading = true
-      localStorage.setItem('loadingOut', this.loading)
-      this.$router.push('/')
-
       setTimeout(() => {
         this.showMessage = true
+        this.colorTool = 'success'
         this.message = 'Logout Succesfull'
-        this.$auth.logout()
-        localStorage.removeItem('loadingOut')
-        this.loading = false
         setTimeout(() => {
+          this.$auth.logout()
+          this.$router.push('/')
           this.showMessage = false
-          this.message = ''
-        }, 100)
-      }, 300)
+          this.loading = false
+          this.message = 'Logout'
+          this.colorTool = 'grey lighten-1'
+        }, 1000)
+      }, 2000)
     },
     onResize () {
       this.isMobile = window.innerWidth < 600
@@ -274,4 +255,41 @@ export default {
   display: transparent;
   height: 100px;
 }
+
+.custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

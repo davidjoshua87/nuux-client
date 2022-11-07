@@ -20,7 +20,8 @@
     "vue": "^2.7.10",
     "vue-server-renderer": "^2.7.10",
     "vue-template-compiler": "^2.7.10",
-    "vuetify": "^2.6.10"
+    "vuetify": "^2.6.10",
+    "vuetify-audio": "^0.3.3"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.19.1",

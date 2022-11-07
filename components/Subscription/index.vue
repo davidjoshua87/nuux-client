@@ -1,12 +1,12 @@
 <template>
-  <div class="bg-image-subscribe d-flex align-center justify-center my-6">
+  <div class="bg-image-subscribe d-flex align-center justify-center">
     <v-container>
-      <v-row justify="center" align="center" class="d-flex">
+      <v-row class="d-flex justify-center">
         <v-col v-for="(item, i) in items" :key="i" cols="12" md="4">
           <v-item-group v-if="showCard === true">
             <v-item>
-              <v-card id="item._id" class="mx-auto my-6" max-width="320">
-                <img width="100%" height="300" :src="item.link">
+              <v-card id="item._id" class="mx-auto" max-width="320">
+                <img width="100%" height="260" :src="item.link">
 
                 <v-card-title>
                   {{ item.title }}
@@ -58,7 +58,7 @@
           </v-alert>
         </v-row>
 
-        <v-row class="py-4 d-flex justify-center">
+        <v-row class="py-4 d-flex align-center justify-center">
           <v-progress-circular
             v-if="loading"
             :size="70"
