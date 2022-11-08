@@ -125,7 +125,7 @@ export default {
   methods: {
     resetForm () {
       this.loginData.email = ''
-      this.loginData.password = ' '
+      this.loginData.password = ''
     },
     async login () {
       this.loading = true

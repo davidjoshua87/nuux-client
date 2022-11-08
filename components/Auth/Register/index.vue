@@ -205,7 +205,7 @@ export default {
     resetForm () {
       this.registerData.fullname = ''
       this.registerData.email = ''
-      this.registerData.password = ' '
+      this.registerData.password = ''
     },
     async register () {
       this.loading = true
