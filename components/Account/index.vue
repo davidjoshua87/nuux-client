@@ -482,7 +482,6 @@ export default {
       validFormPass: true,
       user: null,
       image: null,
-      linkAvatar: '/avatar-default.png',
       showPassword: false,
       loading: false,
       showCard: true,
@@ -495,6 +494,7 @@ export default {
       message: '',
       textWarning: '',
       textSubscribe: '',
+      linkAvatar: '',
       userData: {
         id: '',
         fullname: '',
@@ -623,6 +623,8 @@ export default {
 
       if (this.userData.avatar !== '') {
         this.linkAvatar = this.userData.avatar
+      } else {
+        this.linkAvatar = '/avatar-default.png'
       }
 
       if (this.userData.subscription === null) {
