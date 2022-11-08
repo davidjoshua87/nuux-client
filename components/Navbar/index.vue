@@ -26,6 +26,37 @@
       </v-list>
       <!-- after login -->
       <v-list v-else>
+        <!-- avatar -->
+        <v-card
+          elevation="18"
+          class="row pa-4 ma-lg-4 ma-md-2"
+          style="margin: 12px 0px"
+        >
+          <div class="d-flex justify-center" style="width: 100%; font-size: 12px;">
+            <h2 class="text-center">
+              {{ fullname }}
+            </h2>
+          </div>
+
+          <v-card-text class="d-flex">
+            <v-avatar
+              density="default"
+              variant="flat"
+              :width="$vuetify.breakpoint.xs ? '95%' : '80px'"
+              :height="$vuetify.breakpoint.xs ? '95%' : '80px'"
+              class="rounded-lg-6 me-6 fill-height mobile-avatar"
+            >
+              <v-responsive>
+                <v-img
+                  aspect-ratio="1"
+                  contain
+                  :src="linkAvatar"
+                  alt="avatar"
+                />
+              </v-responsive>
+            </v-avatar>
+          </v-card-text>
+        </v-card>
         <div v-for="(item, i) in items" :key="i">
           <div v-if="item.isAuth === true">
             <div v-if="item.isSubscribe === isSubscribe">
@@ -126,6 +157,8 @@ export default {
       message: 'Logout',
       colorTool: 'grey lighten-1',
       linkMenu: '',
+      linkAvatar: '',
+      fullname: '',
       isMobile: false,
       isDesktop: false,
       isMenuLogin: false,
@@ -229,6 +262,8 @@ export default {
           .then((response) => {
             if (response.message === 'Succeed Get User By Id') {
               this.user = response.data
+              this.fullname = this.user.fullname
+              this.linkAvatar = this.user.avatar
             }
           }).catch((error) => {
             if (error.response) {
