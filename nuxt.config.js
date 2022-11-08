@@ -3,15 +3,19 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - musicxperience',
-    title: 'mux',
+    titleTemplate: '%s - Music Xperience',
+    title: 'MUX - Listening is everything',
     htmlAttrs: {
       lang: 'en'
     },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: 'Mux is the only music you need.' },
+      { hid: 'og:image', name: 'og:image', content: 'https://res.cloudinary.com/don2sbjhh/image/upload/v1667889890/musicxperience/logo-mux-large.png' },
+      { hid: 'og:url', name: 'og:url', content: 'https://musicxperience.vercel.app/' },
+      { hid: 'og:title', name: 'og:title', content: 'Listening is everything' },
+      { hid: 'keywords', name: 'keywords', content: 'Mux, music, online, listen, stream, play, digital, album, artist, playlist' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
