@@ -27,10 +27,10 @@
       <!-- after login -->
       <v-list v-else>
         <!-- avatar -->
-        <v-card
+        <div
           elevation="18"
           class="row pa-4 ma-lg-4 ma-md-2"
-          style="margin: 12px 0px"
+          style="margin: 12px 0px; background: transparent;"
         >
           <div class="d-flex justify-center" style="width: 100%; font-size: 12px;">
             <h2 class="text-center">
@@ -56,7 +56,7 @@
               </v-responsive>
             </v-avatar>
           </v-card-text>
-        </v-card>
+        </div>
         <div v-for="(item, i) in items" :key="i">
           <div v-if="item.isAuth === true">
             <div v-if="item.isSubscribe === isSubscribe">
@@ -81,6 +81,35 @@
             </div>
           </div>
         </div>
+        <div>
+          <v-tooltip v-model="showMessage" bottom :color="colorTool">
+            <template #activator="{ on, attrs }">
+              <v-btn
+                elevation="0"
+                v-bind="attrs"
+                :loading="loading"
+                :disabled="loading"
+                style="width: 100%; background: transparent;"
+                class="my-4"
+                v-on="on"
+                @click="logout"
+              >
+                <v-list-item-action>
+                  <v-icon>mdi-logout</v-icon>
+                </v-list-item-action>
+                <v-list-item-content class="text-left text-capitalize">
+                  <v-list-item-title>Logout</v-list-item-title>
+                </v-list-item-content>
+                <template #loader>
+                  <span class="custom-loader">
+                    <v-icon light>mdi-cached</v-icon>
+                  </span>
+                </template>
+              </v-btn>
+            </template>
+            <span>{{ message }}</span>
+          </v-tooltip>
+        </div>
       </v-list>
     </v-navigation-drawer>
 
@@ -91,6 +120,7 @@
     >
       <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" @click="getUpdateUser" />
       <v-btn
+        v-if="isDesktop"
         :to="isSubscribe === true ? '/subscription' : '/home'"
         router
         exact
@@ -117,7 +147,7 @@
           </v-btn>
         </div>
         <div class="mr-4">
-          <v-tooltip v-model="showMessage" bottom :color="colorTool">
+          <v-tooltip v-if="isDesktop" v-model="showMessage" bottom :color="colorTool">
             <template #activator="{ on, attrs }">
               <v-btn
                 router
@@ -139,6 +169,20 @@
             <span>{{ message }}</span>
           </v-tooltip>
         </div>
+        <v-btn
+          v-if="isMobile"
+          :to="isSubscribe === true ? '/subscription' : '/home'"
+          router
+          exact
+          @click="getUpdateUser"
+        >
+          <div>
+            <img src="/logo-mux.png">
+          </div>
+          <h1 class="font-weight-semibold leading-normal text-xl text-uppercase ml-2">
+            {{ title }}
+          </h1>
+        </v-btn>
       </template>
     </v-app-bar>
   </div>
