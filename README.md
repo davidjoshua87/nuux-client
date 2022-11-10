@@ -1,4 +1,4 @@
-# nuux
+# mux
 
 ## Build Setup
 
