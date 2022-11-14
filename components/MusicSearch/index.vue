@@ -1,16 +1,18 @@
 <template>
   <div>
-    <v-card class="pa-4 mt-4">
+    <v-card class="pa-4 pl-md-10 pr-md-10 mt-4">
       <v-text-field
         v-model="keywordSearch"
         label="Search Music"
         required
-        append-icon="mdi-close"
+        :hint="hintText"
+        :append-icon="closeBtn === true ? 'mdi-close' : ''"
+        @keyup="handleInputSearch"
         @keypress="handleSearch"
         @click:append="clearSearch"
       />
     </v-card>
-    <v-card>
+    <v-card class="mt-7">
       <v-row class="py-4 d-flex justify-center">
         <v-progress-circular
           v-if="isLoading"
@@ -29,6 +31,14 @@
         </p>
       </div>
       <v-card class="mx-auto" tile>
+        <div>
+          <h2 v-if="showPlaylist === true" class="mb-md-4 pa-3 text-center text-capitalize">
+            {{ keywordPlaylist }}
+          </h2>
+          <h2 v-else class="mb-md-4 pa-3 text-center text-capitalize">
+            Search "{{ keywordSearch }}" Playlist
+          </h2>
+        </div>
         <v-row>
           <v-col
             v-for="(item, i) in dataMusic"
@@ -109,15 +119,48 @@ export default {
       ],
       dataMusic: [],
       keywordSearch: '',
+      keywordPlaylist: '',
+      hintText: '',
       isLoading: false,
       emptyState: false,
-      errorSearch: false
+      errorSearch: false,
+      closeBtn: false,
+      showPlaylist: false
     }
   },
+  mounted () {
+    this.fetchPlaylist()
+  },
   methods: {
+    async fetchPlaylist () {
+      this.isLoading = true
+      this.emptyState = false
+      this.showPlaylist = false
+      this.dataMusic = []
+      this.keywordPlaylist = 'indonesian hits'
+      await this.$axios
+        .$get(`/api/music/playlist/${this.keywordPlaylist}/song`)
+        .then((response) => {
+          if (response.data.length > 0) {
+            this.isLoading = false
+            this.dataMusic = response.data
+            this.emptyState = false
+            this.showPlaylist = true
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          this.errorSearch = this.keywordPlaylist
+          this.isLoading = false
+          this.emptyState = true
+          this.dataMusic = []
+          this.showPlaylist = false
+        })
+    },
     async fetchMusic () {
       this.isLoading = true
       this.emptyState = false
+      this.showPlaylist = false
       this.dataMusic = []
       await this.$axios
         .$get(`/api/music/search/${this.keywordSearch}/song`)
@@ -126,11 +169,13 @@ export default {
             this.isLoading = false
             this.dataMusic = response.data
             this.emptyState = false
+            this.showPlaylist = false
           } else {
             this.errorSearch = this.keywordSearch
             this.isLoading = false
             this.emptyState = true
             this.dataMusic = []
+            this.showPlaylist = false
           }
         })
         .catch((err) => {
@@ -139,7 +184,36 @@ export default {
           this.isLoading = false
           this.emptyState = true
           this.dataMusic = []
+          this.showPlaylist = false
         })
+    },
+    debounce (func, timeout) {
+      let timer
+      return (...args) => {
+        clearTimeout(timer)
+        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+      }
+    },
+    async handleInputSearch (e) {
+      const isWordCharacter = this.keywordSearch.length
+
+      if (isWordCharacter >= 2) {
+        this.hintText = 'For example: Dewa19'
+        await this.debounce(this.fetchMusic(), 300)
+      } else {
+        this.emptyState = false
+        this.hintText = 'Keyword minimum 2 characters'
+
+        if (isWordCharacter === 0) {
+          this.fetchPlaylist()
+        }
+      }
+
+      if (isWordCharacter > 0) {
+        this.closeBtn = true
+      } else {
+        this.closeBtn = false
+      }
     },
     handleSearch (e) {
       if (e.key === 'Enter') {
@@ -149,6 +223,8 @@ export default {
     clearSearch () {
       this.keywordSearch = ''
       this.dataMusic = []
+      this.closeBtn = false
+      this.fetchPlaylist()
     }
   }
 }
