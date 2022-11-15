@@ -32,15 +32,49 @@
       </div>
       <v-card class="mx-auto" tile>
         <div>
-          <h2 v-if="showPlaylist === true" class="mb-md-4 pa-3 text-center text-capitalize">
+          <h2
+            v-if="showPlaylist === true"
+            class="mb-md-4 pa-3 text-center text-capitalize"
+          >
             {{ keywordPlaylist }}
           </h2>
-          <h2 v-else class="mb-md-4 pa-3 text-center text-capitalize">
+          <h2
+            v-if="showSearchPlaylist === true"
+            class="mb-md-4 pa-3 text-center text-capitalize"
+          >
             Search "{{ keywordSearch }}" Playlist
           </h2>
         </div>
-        <v-row>
-          <v-col
+        <v-row class="mx-auto tile">
+          <v-card height="330" width="100%" :class="{ playlist }">
+            <v-list rounded>
+              <v-list-item-group>
+                <v-list-item
+                  v-for="(track, idx) in playlist"
+                  :key="track.trackId"
+                  :class="[
+                    { selected: track === selectedTrack },
+                  ]"
+                >
+                  <v-list-item-content
+                    class="d-flex align-center justify-center"
+                    @click="selectTrack(track)"
+                    @dblclick="play(idx)"
+                  >
+                    <v-list-item-title class="text-left px-2">
+                      {{ idx + 1 }}. {{ track.artistName }} -
+                      {{ track.trackName }}
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-spacer />
+                  <span class="px-2">
+                    {{ millisToMinutes(track.trackTimeMillis) }}
+                  </span>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+          <!-- <v-col
             v-for="(item, i) in dataMusic"
             :key="i"
             cols="12"
@@ -68,11 +102,12 @@
                     flat
                     color="success"
                     downloadable
+                    play-icon="mdi-pause"
                   />
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
-          </v-col>
+          </v-col> -->
         </v-row>
       </v-card>
     </v-card>
@@ -82,9 +117,9 @@
 <script>
 export default {
   name: 'MusicSearchComponent',
-  components: {
-    VuetifyAudio: () => import('vuetify-audio')
-  },
+  // components: {
+  //   VuetifyAudio: () => import('vuetify-audio')
+  // },
   data () {
     return {
       items: [
@@ -118,6 +153,7 @@ export default {
         }
       ],
       dataMusic: [],
+      playlist: [],
       keywordSearch: '',
       keywordPlaylist: '',
       hintText: '',
@@ -125,7 +161,11 @@ export default {
       emptyState: false,
       errorSearch: false,
       closeBtn: false,
-      showPlaylist: false
+      showPlaylist: false,
+      showSearchPlaylist: false,
+      selectedTrack: null,
+      index: 0,
+      playing: false
     }
   },
   mounted () {
@@ -136,6 +176,7 @@ export default {
       this.isLoading = true
       this.emptyState = false
       this.showPlaylist = false
+      this.showSearchPlaylist = false
       this.dataMusic = []
       this.keywordPlaylist = 'indonesian hits'
       await this.$axios
@@ -144,6 +185,7 @@ export default {
           if (response.data.length > 0) {
             this.isLoading = false
             this.dataMusic = response.data
+            this.playlist = response.data
             this.emptyState = false
             this.showPlaylist = true
           }
@@ -154,6 +196,7 @@ export default {
           this.isLoading = false
           this.emptyState = true
           this.dataMusic = []
+          this.playlist = []
           this.showPlaylist = false
         })
     },
@@ -161,6 +204,7 @@ export default {
       this.isLoading = true
       this.emptyState = false
       this.showPlaylist = false
+      this.showSearchPlaylist = false
       this.dataMusic = []
       await this.$axios
         .$get(`/api/music/search/${this.keywordSearch}/song`)
@@ -168,14 +212,16 @@ export default {
           if (response.data.length > 0) {
             this.isLoading = false
             this.dataMusic = response.data
+            this.playlist = response.data
             this.emptyState = false
-            this.showPlaylist = false
+            this.showSearchPlaylist = false
           } else {
             this.errorSearch = this.keywordSearch
             this.isLoading = false
             this.emptyState = true
             this.dataMusic = []
-            this.showPlaylist = false
+            this.playlist = []
+            this.showSearchPlaylist = false
           }
         })
         .catch((err) => {
@@ -184,14 +230,17 @@ export default {
           this.isLoading = false
           this.emptyState = true
           this.dataMusic = []
-          this.showPlaylist = false
+          this.playlist = []
+          this.showSearchPlaylist = false
         })
     },
     debounce (func, timeout) {
       let timer
       return (...args) => {
         clearTimeout(timer)
-        timer = setTimeout(() => { func.apply(this, args) }, timeout)
+        timer = setTimeout(() => {
+          func.apply(this, args)
+        }, timeout)
       }
     },
     async handleInputSearch (e) {
@@ -223,11 +272,60 @@ export default {
     clearSearch () {
       this.keywordSearch = ''
       this.dataMusic = []
+      this.playlist = []
       this.closeBtn = false
       this.fetchPlaylist()
+    },
+    millisToMinutes (millis) {
+      const minutes = Math.floor(millis / 60000)
+      const seconds = ((millis % 60000) / 1000).toFixed(0)
+      return minutes + ':' + (seconds < 10 ? '0' : '') + seconds
+    },
+    selectTrack (track) {
+      this.selectedTrack = track
+    },
+    play (index) {
+      const idx = index
+      const selectedTrackIndex = this.playlist.findIndex(
+        track => track === this.selectedTrack
+      )
+
+      if (typeof index === 'number') {
+        index = idx
+      } else if (this.selectedTrack) {
+        if (this.selectedTrack !== this.currentTrack) {
+          this.stop()
+        }
+        index = selectedTrackIndex
+      } else {
+        index = this.index
+      }
+
+      const track = this.playlist[index].howl
+
+      if (track.playing()) {
+        return
+      } else {
+        track.play()
+      }
+
+      this.selectedTrack = this.playlist[index]
+      this.playing = true
+      this.index = index
     }
   }
 }
 </script>
 
-<style></style>
+<style>
+.selected {
+  background-color: purple !important;
+}
+.even {
+  background-color: #505050;
+}
+.playlist {
+  overflow: auto;
+  padding: 12px;
+}
+</style>
