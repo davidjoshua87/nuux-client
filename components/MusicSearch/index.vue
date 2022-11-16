@@ -42,11 +42,11 @@
             v-if="showSearchPlaylist === true"
             class="mb-md-4 pa-3 text-center text-capitalize"
           >
-            Search "{{ keywordSearch }}" Playlist
+            Results Playlist:  "{{ keywordSearch }}"
           </h2>
         </div>
         <v-row class="mx-auto tile">
-          <v-card height="330" width="100%" :class="{ playlist }">
+          <v-card id="playlist" height="300" width="100%" :class="{ playlist }">
             <v-list rounded>
               <v-list-item-group>
                 <v-list-item
@@ -58,10 +58,9 @@
                 >
                   <v-list-item-content
                     class="d-flex align-center justify-center"
-                    @click="selectTrack(track)"
-                    @dblclick="play(idx)"
+                    @click="selectTrack(track), snackbar = true, zIndex = 999"
                   >
-                    <v-list-item-title class="text-left px-2">
+                    <v-list-item-title class="px-2">
                       {{ idx + 1 }}. {{ track.artistName }} -
                       {{ track.trackName }}
                     </v-list-item-title>
@@ -74,41 +73,56 @@
               </v-list-item-group>
             </v-list>
           </v-card>
-          <!-- <v-col
-            v-for="(item, i) in dataMusic"
-            :key="i"
-            cols="12"
-            sm="6"
-            lg="4"
-          >
-            <v-list-item three-line>
-              <v-list-item-content class="d-flex align-center justify-center">
-                <v-img
-                  :lazy-src="item.artworkUrl30"
-                  max-height="291"
-                  max-width="250"
-                  :src="item.artworkUrl100"
-                  class="mb-5"
-                />
-                <v-list-item-title class="text-center">
-                  {{ item.artistName }}
-                </v-list-item-title>
-                <v-list-item-subtitle class="text-center">
-                  {{ item.trackName }}
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>
-                  <vuetify-audio
-                    :file="item.previewUrl"
-                    flat
-                    color="success"
-                    downloadable
-                    play-icon="mdi-pause"
-                  />
-                </v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
-          </v-col> -->
         </v-row>
+        <v-overlay v-if="snackbar === true" :z-index="zIndex" style="background: rgba(0,0,0,0.9);">
+          <v-snackbar
+            v-model="snackbar"
+            :timeout="-1"
+            absolute
+            centered
+            elevation="24"
+          >
+            <v-list width="312px" style="border-radius: 8px">
+              <v-list-item>
+                <v-list-item-content class="d-flex align-center justify-center">
+                  <v-img
+                    :lazy-src="selectedTrack.artworkUrl30"
+                    max-height="291"
+                    max-width="250"
+                    :src="selectedTrack.artworkUrl100"
+                    class="mb-5"
+                    style="border-radius: 6px;"
+                  />
+                  <v-divider color="pink" class="my-4" />
+                  <v-list-item-title class="text-center mb-2">
+                    {{ selectedTrack.artistName }}
+                  </v-list-item-title>
+                  <v-list-item-subtitle class="text-center mb-2">
+                    {{ selectedTrack.trackName }}
+                  </v-list-item-subtitle>
+                  <v-list-item-subtitle>
+                    <vuetify-audio
+                      :file="selectedTrack.previewUrl"
+                      flat
+                      color="success"
+                      downloadable
+                    />
+                  </v-list-item-subtitle>
+                  <v-btn
+                    color="deep-orange"
+                    elevation="24"
+                    dence
+                    rounded
+                    style="max-width: 50px;"
+                    @click="snackbar = false, zIndex = 0"
+                  >
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-snackbar>
+        </v-overlay>
       </v-card>
     </v-card>
   </div>
@@ -117,9 +131,9 @@
 <script>
 export default {
   name: 'MusicSearchComponent',
-  // components: {
-  //   VuetifyAudio: () => import('vuetify-audio')
-  // },
+  components: {
+    VuetifyAudio: () => import('vuetify-audio')
+  },
   data () {
     return {
       items: [
@@ -157,6 +171,9 @@ export default {
       keywordSearch: '',
       keywordPlaylist: '',
       hintText: '',
+      index: 0,
+      zIndex: 0,
+      background: 'transparent',
       isLoading: false,
       emptyState: false,
       errorSearch: false,
@@ -164,8 +181,7 @@ export default {
       showPlaylist: false,
       showSearchPlaylist: false,
       selectedTrack: null,
-      index: 0,
-      playing: false
+      snackbar: false
     }
   },
   mounted () {
@@ -214,7 +230,7 @@ export default {
             this.dataMusic = response.data
             this.playlist = response.data
             this.emptyState = false
-            this.showSearchPlaylist = false
+            this.showSearchPlaylist = true
           } else {
             this.errorSearch = this.keywordSearch
             this.isLoading = false
@@ -283,41 +299,12 @@ export default {
     },
     selectTrack (track) {
       this.selectedTrack = track
-    },
-    play (index) {
-      const idx = index
-      const selectedTrackIndex = this.playlist.findIndex(
-        track => track === this.selectedTrack
-      )
-
-      if (typeof index === 'number') {
-        index = idx
-      } else if (this.selectedTrack) {
-        if (this.selectedTrack !== this.currentTrack) {
-          this.stop()
-        }
-        index = selectedTrackIndex
-      } else {
-        index = this.index
-      }
-
-      const track = this.playlist[index].howl
-
-      if (track.playing()) {
-        return
-      } else {
-        track.play()
-      }
-
-      this.selectedTrack = this.playlist[index]
-      this.playing = true
-      this.index = index
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 .selected {
   background-color: purple !important;
 }
@@ -328,4 +315,26 @@ export default {
   overflow: auto;
   padding: 12px;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #FFF;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: purple;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 </style>

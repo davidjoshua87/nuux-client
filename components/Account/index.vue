@@ -378,7 +378,8 @@
               <v-col cols="12" md="6" class="pl-0">
                 <v-alert
                   density="comfortable"
-                  class="warning mb-4"
+                  color="deep-orange"
+                  class="mb-4"
                   role="alert"
                 >
                   <span class="v-alert__underlay" />
