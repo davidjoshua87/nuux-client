@@ -106,6 +106,7 @@
                       flat
                       color="success"
                       downloadable
+                      :ended="audioFinish"
                     />
                   </v-list-item-subtitle>
                   <v-btn
@@ -299,6 +300,9 @@ export default {
     },
     selectTrack (track) {
       this.selectedTrack = track
+    },
+    audioFinish () {
+      this.snackbar = false
     }
   }
 }
