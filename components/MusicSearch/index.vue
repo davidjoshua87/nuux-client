@@ -93,7 +93,6 @@
                     class="mb-5"
                     style="border-radius: 6px;"
                   />
-                  <v-divider color="pink" class="my-4" />
                   <v-list-item-title class="text-center mb-2">
                     {{ selectedTrack.artistName }}
                   </v-list-item-title>
