@@ -6,7 +6,17 @@
 
 <script>
 export default {
-  middleware: 'isAuthenticated'
+  middleware: 'isAuthenticated',
+  head: {
+    title: 'Profile page',
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Profile page'
+      }
+    ]
+  }
 }
 </script>
 
