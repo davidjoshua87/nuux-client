@@ -18,7 +18,7 @@ const songs = [
   {
     title: 'Istriku',
     artist: 'My JDs',
-    seconds: 199.8,
+    seconds: 213,
     cover:
       'https://res.cloudinary.com/dj-project/image/upload/v1722838861/musicxperience/Istriku-cover.png',
     src: 'https://res.cloudinary.com/dj-project/video/upload/v1722838776/musicxperience/Istriku-song.mp3'
@@ -34,15 +34,15 @@ const songs = [
   {
     title: 'Kekuatanku Hanya Kau',
     artist: 'My JDs',
-    seconds: 193.2,
+    seconds: 202,
     cover:
       'https://res.cloudinary.com/dj-project/image/upload/v1722840376/musicxperience/Kekuatanku-Hanya-Kau-cover.png',
     src: 'https://res.cloudinary.com/dj-project/video/upload/v1722840226/musicxperience/Kekuatanku-Hanya-Kau-song.mp3'
   },
   {
-    title: 'Kesetiaan Mu',
+    title: 'Kesetiaan-Mu',
     artist: 'My JDs',
-    seconds: 180.6,
+    seconds: 181,
     cover:
       'https://res.cloudinary.com/dj-project/image/upload/v1722840710/musicxperience/Kesetiaan-Mu-cover.png',
     src: 'https://res.cloudinary.com/dj-project/video/upload/v1722840502/musicxperience/Kesetiaan-Mu-song.mp3'
@@ -50,7 +50,7 @@ const songs = [
   {
     title: 'Yesus Kasihku',
     artist: 'My JDs',
-    seconds: 88.2,
+    seconds: 107,
     cover:
       'https://res.cloudinary.com/dj-project/image/upload/v1722840963/musicxperience/Yesus-Kasihku-cover.png',
     src: 'https://res.cloudinary.com/dj-project/video/upload/v1722840998/musicxperience/Yesus-Kasihku-song.mp3'
@@ -58,7 +58,7 @@ const songs = [
   {
     title: 'Cinta Dari Tuhan',
     artist: 'My JDs',
-    seconds: 153,
+    seconds: 175,
     cover:
       'https://res.cloudinary.com/dj-project/image/upload/v1722841386/musicxperience/Cinta-Dari-Tuhan-cover.png',
     src: 'https://res.cloudinary.com/dj-project/video/upload/v1722841425/musicxperience/Cinta-Dari-Tuhan-song.mp3'
@@ -66,7 +66,7 @@ const songs = [
   {
     title: 'Cahaya Faith',
     artist: 'My JDs',
-    seconds: 186.6,
+    seconds: 191,
     cover:
       'https://res.cloudinary.com/dj-project/image/upload/v1722841713/musicxperience/Cahaya-Faith-cover.png',
     src: 'https://res.cloudinary.com/dj-project/video/upload/v1722841555/musicxperience/Cahaya-Faith-song.mp3'

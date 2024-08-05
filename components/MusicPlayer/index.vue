@@ -1,15 +1,15 @@
 <template>
   <div>
     <!-- <v-card class="mt-7"> -->
-    <v-row class="ma-auto center-content mt-12">
+    <v-card class="center-content mt-5">
       <div
         class="player ma-auto pa-lg-3 d-lg-flex justify-lg-center rounded-lg row"
       >
         <div class="cover-wrapper col-lg-3">
           <img :class="coverObject" :src="current.cover">
         </div>
-        <div class="col-lg-9">
-          <div class="song-details px-8 flex-lg-row">
+        <div class="col-lg-9 pa-0">
+          <div class="song-details px-10 flex-lg-row">
             <h2 class="song-title">
               {{ current.title }}
             </h2>
@@ -18,13 +18,13 @@
             </p>
             <div class="progress-bar">
               <progress-bar
-                :size="15"
+                :size="10"
                 :val="current.percent"
+                :bg-color="'#53565a'"
                 :bar-color="'#df83f1'"
                 :bar-border-radius="8"
               />
             </div>
-
             <div class="timer">
               <p class="start">
                 {{ currentlyTimer }}
@@ -41,7 +41,9 @@
               icon
               @click="prev"
             >
-              <v-icon>mdi-step-backward</v-icon>
+              <v-icon style="color: #df83f1;" size="36px">
+                mdi-step-backward
+              </v-icon>
             </v-btn>
             <v-btn
               v-if="!isPlaying"
@@ -49,10 +51,14 @@
               icon
               @click="play"
             >
-              <v-icon>mdi-play</v-icon>
+              <v-icon style="color: black;" size="52px">
+                mdi-play
+              </v-icon>
             </v-btn>
             <v-btn v-else class="pause cursor-pointer" icon @click="pause">
-              <v-icon>mdi-pause</v-icon>
+              <v-icon style="color: black;" size="52px">
+                mdi-pause
+              </v-icon>
             </v-btn>
             <v-btn
               v-if="songs.length > 1"
@@ -60,7 +66,9 @@
               icon
               @click="next"
             >
-              <v-icon>mdi-step-forward</v-icon>
+              <v-icon style="color: #df83f1;" size="36px">
+                mdi-step-forward
+              </v-icon>
             </v-btn>
           </div>
         </div>
@@ -80,7 +88,7 @@
           </v-btn>
         </div>
       </div>
-    </v-row>
+    </v-card>
     <!-- </v-card> -->
     <!-- <music-lists
       v-if="showMusicLists"
@@ -88,13 +96,53 @@
       @play-song="play"
       @update-progress="updateProgress"
     /> -->
+    <v-card v-if="showMusicLists" class="ma-auto center-content mt-4">
+      <div class="playlist rounded-lg">
+        <h3 class="title">
+          Now Playing <span> 🎵 </span>
+        </h3>
+        <ul>
+          <li v-for="song in songs" :key="song.src" class="song">
+            <div class="cover-playlist">
+              <img class="cover img-playlist" :src="song.cover">
+            </div>
+            <div class="details" @click="play(song)">
+              <h2 class="song-title">
+                {{ song.title }}
+              </h2>
+              <p class="artist">
+                {{ song.artist }}
+              </p>
+              <progress-bar
+                v-if="song.isPlaying"
+                :size="8"
+                :val="current.percent"
+                :bg-color="'#53565a'"
+                :bar-color="'#df83f1'"
+                :bar-border-radius="8"
+              />
+            </div>
+            <div class="timer-playlist">
+              <p>
+                {{ song.totalTimer }}
+              </p>
+            </div>
+          <!-- <div class="actions">
+            <v-btn class="delete" @click="removeSongFromPlaylist(song)">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </div> -->
+          </li>
+        </ul>
+      </div>
+    </v-card>
   </div>
 </template>
 
 <script>
 import ProgressBar from 'vue-simple-progress'
 import { formatTimer } from '../../helpers/timer'
-import { deleteElement, threatSongs, shuffleArray } from '../../helpers/utils'
+import { deleteElement, threatSongs } from '../../helpers/utils'
 import songs from '../MusicPlayer/songs'
 
 export default {
@@ -109,7 +157,7 @@ export default {
       index: 0,
       isPlaying: false,
       currentlyTimer: '00:00',
-      songs: shuffleArray(songs),
+      songs,
       player: new Audio(),
       showMusicLists: false
     }
@@ -231,7 +279,7 @@ button:hover {
 }
 
 .song-details {
-  margin-top: 25px;
+  margin-top: 12px;
 }
 
 .cover-playlist {
@@ -241,9 +289,10 @@ button:hover {
 
 .cover-wrapper {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 20px;
   height: 100%;
   text-align: center;
+  padding: 0;
 }
 
 .animated {
@@ -258,8 +307,12 @@ button:hover {
   border-radius: 15px;
 }
 
+.img-playlist {
+  margin: 10px auto;
+}
+
 .progress-bar {
-  box-shadow: 0 24px 35px -16px rgba(107, 179, 237, 0.5);
+  box-shadow: 0 24px 35px -16px rgba(107, 179, 237, 0.5) !important;
 }
 
 .cover-playlist > .cover {
@@ -303,7 +356,6 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 15px;
 }
 
 .play,
@@ -330,7 +382,7 @@ button:hover {
   box-shadow: -1px 17px 24px -6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   font-size: 25px;
-  color: #fff;
+  color: black;
   margin-left: 20px;
   margin-right: 20px;
 }
@@ -347,9 +399,22 @@ button:hover {
   align-items: center;
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.09);
-  color: #fff;
+  color: black;
   transition: background-color 0.2s;
   position: relative;
+}
+
+.title {
+  font-weight: 900;
+}
+
+.timer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 10px;
+  color: black;
+  font-weight: 700;
 }
 
 .playlist {
@@ -370,7 +435,10 @@ button:hover {
 
 .playlist .song {
   display: flex;
-  padding: 10px;
+  padding: 15px 25px;
+  border-bottom: 1px solid #53565a;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .actions > .delete {
@@ -385,16 +453,19 @@ button:hover {
 }
 
 .playlist .song:hover {
+  cursor: pointer;
   background-color: #ededed;
   transition: box-shadow 0.2s, background-color 0.3s;
 }
 
-.timer {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  padding: 10px;
+.playlist .details {
+  padding: 0px 0px 0px 20px;
+}
+
+.timer-playlist {
+  padding: 0px;
   color: black;
+  font-weight: 700;
 }
 
 .song-title {
@@ -423,23 +494,19 @@ button:hover {
   text-align: left;
 }
 
-ul {
-  list-style: none;
-}
-
 .footer {
   display: flex;
   justify-content: space-between;
   font-size: 10px;
   background-color: white;
   color: black;
-  margin: 10px 0;
+  margin: 0px 0 10px 0;
+  padding: 10px 25px;
 }
 
 .footer > a {
   cursor: pointer;
   position: relative;
-  top: -10px;
   font-size: 25px;
   color: #585858;
 }
@@ -449,6 +516,15 @@ ul {
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
   padding: 20px;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+p {
+  margin-bottom: 10px;
 }
 
 @media (max-width: 768px) {
@@ -506,5 +582,4 @@ ul {
     opacity: 1;
   }
 }
-
 </style>
