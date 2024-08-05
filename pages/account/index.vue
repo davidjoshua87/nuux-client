@@ -6,7 +6,17 @@
 
 <script>
 export default {
-  middleware: 'auth' // Middleware name
+  middleware: 'auth',
+  head: {
+    title: 'Profile page',
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Profile page'
+      }
+    ]
+  }
 }
 </script>
 

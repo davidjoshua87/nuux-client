@@ -6,7 +6,16 @@
 
 <script>
 export default {
-  middleware: 'auth' // Middleware name
+  middleware: 'auth',
+  head: {
+    meta: [
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Dicovery music page'
+      }
+    ]
+  }
 }
 </script>
 
