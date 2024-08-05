@@ -1,6 +1,9 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  router: {
+    middleware: ['auth'] // Menambahkan middleware auth secara global
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - Music Xperience',
@@ -11,11 +14,29 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Mux is the only music you need.' },
-      { hid: 'og:image', name: 'og:image', content: 'https://res.cloudinary.com/don2sbjhh/image/upload/v1667889890/musicxperience/logo-mux-large.png' },
-      { hid: 'og:url', name: 'og:url', content: 'https://musicxperience.vercel.app/' },
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Mux is the only music you need.'
+      },
+      {
+        hid: 'og:image',
+        name: 'og:image',
+        content:
+          'https://res.cloudinary.com/dj-project/image/upload/v1722762153/musicxperience/logo-mux-large.png'
+      },
+      {
+        hid: 'og:url',
+        name: 'og:url',
+        content: 'https://musicxperience.vercel.app/'
+      },
       { hid: 'og:title', name: 'og:title', content: 'Listening is everything' },
-      { hid: 'keywords', name: 'keywords', content: 'Mux, music, online, listen, stream, play, digital, album, artist, playlist' },
+      {
+        hid: 'keywords',
+        name: 'keywords',
+        content:
+          'Mux, music, online, listen, stream, play, digital, album, artist, playlist'
+      },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
@@ -25,7 +46,11 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    '~/plugins/cookies.js'
+    // { src: '~/plugins/fontawesome.js', mode: 'client' }
+    // { src: '~/plugins/k-progress.js', mode: 'client' }
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -35,7 +60,8 @@ export default {
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/dotenv'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -44,34 +70,72 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/auth-next'
   ],
+  // Global page headers and other configurations...
+  env: {
+    SECRET_KEY: process.env.SECRET_KEY,
+    NAME: process.env.NAME,
+    EMAIL: process.env.EMAIL,
+    PASSWORD: process.env.PASSWORD
+  },
 
   auth: {
     strategies: {
       local: {
         token: {
           property: 'token',
-          global: true,
-          required: true,
-          type: 'Bearer'
+          global: true
+          // Specify the token type if needed
         },
         user: {
-          property: 'user',
-          autoFetch: true
+          property: 'user'
         },
         endpoints: {
-          login: { url: '/api/user/signin', method: 'post' },
-          logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
-          user: { url: '/api/user/me', method: 'get' }
+          login: {
+            url: '/api/login',
+            method: 'post',
+            propertyName: 'token'
+          },
+          user: {
+            url: '/api/user',
+            method: 'get',
+            propertyName: 'user'
+          },
+          logout: {
+            url: '/api/logout',
+            method: 'post'
+          }
         }
       }
     }
   },
 
+  // auth: {
+  //   strategies: {
+  //     local: {
+  //       token: {
+  //         property: 'token',
+  //         global: true,
+  //         required: true,
+  //         type: 'Bearer'
+  //       },
+  //       user: {
+  //         property: 'user',
+  //         autoFetch: true
+  //       },
+  //       endpoints: {
+  //         login: { url: '/api/user/signin', method: 'post' },
+  //         logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
+  //         user: { url: '/api/user/me', method: 'get' }
+  //       }
+  //     }
+  //   }
+  // },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    // baseURL: 'http://localhost:5000'
-    baseURL: 'https://nuux-server.herokuapp.com'
+    baseURL: 'http://localhost:5000'
+    // baseURL: 'https://nuux-server.herokuapp.com'
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

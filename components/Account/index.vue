@@ -1,8 +1,11 @@
 <template>
-  <div class="bg-image-account d-flex align-center justify-center">
+  <div class="d-flex align-center justify-center">
     <v-container>
-      <v-row class="mt-12" style="margin-top: 5px">
-        <v-col cols="12">
+      <v-row
+        class="mt-12 d-flex align-center justify-center"
+        style="margin-top: 5px"
+      >
+        <v-col cols="12" md="6">
           <!-- account avatar -->
           <v-card
             v-if="showCard === true"
@@ -37,6 +40,7 @@
                     <label for="upload-image" class="custom-file-upload" />
 
                     <v-btn
+                      disabled
                       elevation="6"
                       density="default"
                       medium
@@ -46,13 +50,16 @@
                       <span class="v-btn__underlay" />
                       <span class="v-btn__content">
                         <img class="mr-1" src="/upload-avatar.png">
-                        <span class="d-none d-sm-block"> Upload new photo </span>
+                        <span class="d-none d-sm-block">
+                          Upload new photo
+                        </span>
                         <span class="d-md-none d-sm-block"> Upload </span>
                       </span>
                     </v-btn>
 
                     <input
                       id="upload-image"
+                      disabled
                       type="file"
                       name="file"
                       accept=".jpeg,.png,.jpg,GIF"
@@ -93,6 +100,7 @@
                       :rules="nameRules"
                       label="Fullname"
                       required
+                      readonly
                     />
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
@@ -115,6 +123,7 @@
                       name="input-phone"
                       label="Phone Number"
                       required
+                      readonly
                     />
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
@@ -125,6 +134,7 @@
                       :rules="addressRules"
                       label="Address"
                       required
+                      readonly
                     />
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
@@ -135,6 +145,7 @@
                       :rules="provinceRules"
                       label="Provice"
                       required
+                      readonly
                     />
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
@@ -145,6 +156,7 @@
                       :counter="5"
                       label="Zip Code"
                       required
+                      readonly
                     />
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
@@ -155,6 +167,7 @@
                       :rules="countryRules"
                       label="Country"
                       required
+                      readonly
                     />
                   </v-col>
                   <v-col cols="12" sm="8" md="6">
@@ -165,6 +178,7 @@
                       :rules="languageRules"
                       label="Language"
                       required
+                      readonly
                       @change="checkInput"
                     />
                   </v-col>
@@ -174,7 +188,7 @@
                       medium
                       type="button"
                       class="primary mr-2"
-                      :disabled="showButtonInfo === false"
+                      :disabled="showButtonInfo === true"
                       @click="saveData"
                     >
                       <span class="v-btn__overlay" />
@@ -182,6 +196,7 @@
                       <span class="v-btn__content"> save changes </span>
                     </v-btn>
                     <v-btn
+                      disabled
                       density="default"
                       medium
                       type="reset"
@@ -198,7 +213,7 @@
             </v-card-text>
           </v-card>
           <!-- change password -->
-          <v-card
+          <!-- <v-card
             v-if="showCard === true"
             elevation="18"
             class="row pa-4 ma-lg-4 ma-md-2"
@@ -318,9 +333,9 @@
                 </v-row>
               </v-form>
             </v-card-text>
-          </v-card>
+          </v-card> -->
           <!-- change plan subscribe -->
-          <v-card
+          <!-- <v-card
             v-if="showCard === true"
             elevation="18"
             class="row pa-4 ma-lg-4 ma-md-2"
@@ -363,9 +378,9 @@
                 <span class="v-btn__content"> Change Subscribe </span>
               </v-btn>
             </v-card-text>
-          </v-card>
+          </v-card> -->
           <!-- delete account -->
-          <v-card
+          <!-- <v-card
             v-if="showCard === true"
             elevation="18"
             class="row pa-4 ma-lg-4 ma-md-2"
@@ -417,7 +432,7 @@
                 <span class="v-btn__content"> Delete Account </span>
               </v-btn>
             </v-card-text>
-          </v-card>
+          </v-card> -->
 
           <v-row class="py-4 d-flex justify-center">
             <v-alert
@@ -587,19 +602,21 @@ export default {
   methods: {
     async getUpdateUser () {
       if (this.dataUser !== null) {
-        await this.$axios
-          .$get(`/api/user/${this.dataUser.id}`)
-          .then((response) => {
-            if (response.message === 'Succeed Get User By Id') {
-              this.user = response.data
-              this.bindDataUser()
-            }
-          })
-          .catch((error) => {
-            if (error.response) {
-              console.log(error)
-            }
-          })
+        this.user = await this.dataUser
+        this.bindDataUser()
+        // await this.$axios
+        //   .$get(`/api/user/${this.dataUser.id}`)
+        //   .then((response) => {
+        //     if (response.message === 'Succeed Get User By Id') {
+        //       this.user = response.data
+        //       this.bindDataUser()
+        //     }
+        //   })
+        //   .catch((error) => {
+        // if (error.response) {
+        //   console.log(error)
+        // }
+        // })
       }
     },
     bindDataUser () {
@@ -833,7 +850,7 @@ export default {
 </script>
 
 <style>
-.bg-image-account {
+/* .bg-image-account {
   background-image: url("/bg-image-login.png");
   width: 100%;
   min-height: 100vh;
@@ -841,10 +858,10 @@ export default {
   background-repeat: no-repeat;
   background-position: 0% 0%;
   background-size: cover;
-}
+} */
 
 input[type="file"] {
-    display: none;
+  display: none;
 }
 
 .group-btn-upload {
@@ -852,11 +869,11 @@ input[type="file"] {
 }
 
 .custom-file-upload {
-    z-index: 10;
-    position: absolute;
-    width: 96%;
-    height: 85%;
-    display: inline-block;
-    cursor: pointer;
+  z-index: 10;
+  position: absolute;
+  width: 96%;
+  height: 85%;
+  display: inline-block;
+  cursor: pointer;
 }
 </style>

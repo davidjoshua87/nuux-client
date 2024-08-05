@@ -1,12 +1,12 @@
 <template>
   <div>
-    <welcome />
+    <discover />
   </div>
 </template>
 
 <script>
 export default {
-  middleware: 'isAuthenticated'
+  middleware: 'auth' // Middleware name
 }
 </script>
 

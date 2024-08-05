@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-image d-flex align-center justify-center">
+  <div class="d-flex align-center justify-center">
     <v-container>
       <v-row justify="center" align="center">
         <v-col cols="12" sm="8" md="6">
@@ -375,14 +375,14 @@ export default {
 </script>
 
 <style>
-.bg-image {
+/* .bg-image {
   background-image: url("/bg-image-login.png");
   width: 100%;
   height: 100vh;
   background-repeat: no-repeat;
   background-position: 0% 0%;
   background-size: cover;
-}
+} */
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
