@@ -16,12 +16,13 @@
                 <p class="artist">
                   {{ song.artist }}
                 </p>
-                <!-- <progress-bar
+                <progress-bar
                   :size="8"
-                  :val="song.percent"
+                  :val="current.percent"
+                  :bg-color="'#53565a'"
                   :bar-color="'#df83f1'"
-                  :bar-border-radius="4"
-                /> -->
+                  :bar-border-radius="8"
+                />
               </div>
               <div>
                 <p class="song-title">

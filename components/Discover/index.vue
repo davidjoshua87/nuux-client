@@ -1,8 +1,8 @@
 <template>
   <div class="d-flex justify-center">
     <v-container>
-      <v-row class="d-flex mt-6 justify-center">
-        <v-col cols="12">
+      <v-row class="d-flex justify-center">
+        <v-col cols="12 pa-7">
           <music-player :current-track="currentTrack" />
         </v-col>
       </v-row>

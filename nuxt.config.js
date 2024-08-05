@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   router: {
-    middleware: ['auth'] // Menambahkan middleware auth secara global
+    middleware: ['auth']
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -83,8 +83,9 @@ export default {
       local: {
         token: {
           property: 'token',
-          global: true
-          // Specify the token type if needed
+          global: true,
+          required: true,
+          type: 'Bearer'
         },
         user: {
           property: 'user'
@@ -108,28 +109,6 @@ export default {
       }
     }
   },
-
-  // auth: {
-  //   strategies: {
-  //     local: {
-  //       token: {
-  //         property: 'token',
-  //         global: true,
-  //         required: true,
-  //         type: 'Bearer'
-  //       },
-  //       user: {
-  //         property: 'user',
-  //         autoFetch: true
-  //       },
-  //       endpoints: {
-  //         login: { url: '/api/user/signin', method: 'post' },
-  //         logout: false, //  we don't have an endpoint for our logout in our API and we just remove the token from localstorage
-  //         user: { url: '/api/user/me', method: 'get' }
-  //       }
-  //     }
-  //   }
-  // },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
