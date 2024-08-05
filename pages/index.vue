@@ -6,7 +6,7 @@
         <subscription />
       </div>
       <div v-else>
-        <welcome />
+        <discover />
       </div>
     </div>
   </div>
@@ -37,16 +37,17 @@ export default {
   methods: {
     async getUpdateUser () {
       if (this.dataUser !== null) {
-        await this.$axios.$get(`/api/user/${this.dataUser.id}`)
-          .then((response) => {
-            if (response.message === 'Succeed Get User By Id') {
-              this.user = response.data
-            }
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error)
-            }
-          })
+        this.user = await this.dataUser
+        // await this.$axios.$get(`/api/user/${this.dataUser.id}`)
+        //   .then((response) => {
+        //     if (response.message === 'Succeed Get User By Id') {
+        //       this.user = response.data
+        //     }
+        //   }).catch((error) => {
+        //     if (error.response) {
+        //       console.log(error)
+        //     }
+        //   })
       }
     },
     getIsSubscribe () {

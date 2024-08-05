@@ -1,18 +1,18 @@
 <template>
   <div>
-    <welcome />
+    <discover />
   </div>
 </template>
 
 <script>
 export default {
-  middleware: 'isAuthenticated',
+  middleware: 'auth',
   head: {
     meta: [
       {
         hid: 'description',
         name: 'description',
-        content: 'Search Music page'
+        content: 'Dicovery music page'
       }
     ]
   }

@@ -3,7 +3,7 @@
     :absolute="!fixed"
     class="d-flex align-center justify-center footer"
   >
-    <span>Group ONE &copy; {{ new Date().getFullYear() }}</span>
+    <span>JDs Developer &copy; {{ new Date().getFullYear() }}</span>
   </div>
 </template>
 

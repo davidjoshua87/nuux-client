@@ -8,7 +8,11 @@
       fixed
       app
     >
-      <div :absolute="!fixed" app class="d-flex align-center justify-center py-3">
+      <div
+        :absolute="!fixed"
+        app
+        class="d-flex align-center justify-center py-3"
+      >
         <span>Mux v.{{ version }}</span>
       </div>
       <!-- befor login -->
@@ -30,9 +34,12 @@
         <div
           elevation="18"
           class="row pa-4 ma-lg-4 ma-md-2"
-          style="margin: 12px 0px; background: transparent;"
+          style="margin: 12px 0px; background: transparent"
         >
-          <div class="d-flex justify-center" style="width: 100%; font-size: 12px;">
+          <div
+            class="d-flex justify-center"
+            style="width: 100%; font-size: 12px"
+          >
             <h2 class="text-center">
               {{ fullname }}
             </h2>
@@ -89,7 +96,7 @@
                 v-bind="attrs"
                 :loading="loading"
                 :disabled="loading"
-                style="width: 100%; background: transparent;"
+                style="width: 100%; background: transparent"
                 class="my-4"
                 v-on="on"
                 @click="logout"
@@ -113,87 +120,106 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
-      <v-app-bar-nav-icon v-if="isMobile" @click.stop="drawer = !drawer" @click="getUpdateUser" />
+    <v-app-bar :clipped-left="clipped" fixed app>
+      <!-- Logo Button di kiri -->
+      <v-btn
+        v-if="isMobile && isAuthenticated"
+        class="d-flex align-center"
+        style="background: transparent;"
+        @click.stop="drawer = !drawer"
+        @click="getUpdateUser"
+      >
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
+
       <v-btn
         v-if="isDesktop"
         :to="isSubscribe === true ? '/subscription' : '/home'"
         router
         exact
+        class="d-flex align-center"
         @click="getUpdateUser"
       >
         <div>
-          <img src="/logo-mux.png">
+          <img src="/logo-mux.png" alt="Logo" class="mr-2">
         </div>
-        <h1 class="font-weight-semibold leading-normal text-xl text-uppercase ml-2">
+        <h1 class="font-weight-semibold leading-normal text-xl text-uppercase">
           {{ title }}
         </h1>
       </v-btn>
-      <v-spacer />
+
+      <!-- Komponen Welcome di tengah -->
       <template v-if="isAuthenticated">
-        <div class="mr-4 ml-4">
-          <v-btn
-            v-if="isDesktop"
-            to="/account"
-            router
-            exact
-            @click="getUpdateUser"
-          >
-            My Account
-          </v-btn>
-        </div>
-        <div class="mr-4">
-          <v-tooltip v-if="isDesktop" v-model="showMessage" bottom :color="colorTool">
-            <template #activator="{ on, attrs }">
-              <v-btn
-                router
-                exact
-                v-bind="attrs"
-                :loading="loading"
-                :disabled="loading"
-                v-on="on"
-                @click="logout"
-              >
-                Logout
-                <template #loader>
-                  <span class="custom-loader">
-                    <v-icon light>mdi-cached</v-icon>
-                  </span>
-                </template>
-              </v-btn>
-            </template>
-            <span>{{ message }}</span>
-          </v-tooltip>
-        </div>
-        <v-btn
-          v-if="isMobile"
-          :to="isSubscribe === true ? '/subscription' : '/home'"
-          router
-          exact
-          @click="getUpdateUser"
-        >
-          <div>
-            <img src="/logo-mux.png">
-          </div>
-          <h1 class="font-weight-semibold leading-normal text-xl text-uppercase ml-2">
-            {{ title }}
-          </h1>
-        </v-btn>
+        <v-container fluid class="d-flex align-center justify-center">
+          <v-row align="center" justify="center">
+            <v-col cols="auto">
+              <welcome v-if="isDesktop && path === '/home'" />
+            </v-col>
+          </v-row>
+        </v-container>
       </template>
+
+      <!-- Menu di bagian kanan -->
+      <template v-if="isAuthenticated">
+        <v-menu v-if="isDesktop" bottom right>
+          <template #activator="{ on, attrs }">
+            <v-btn v-bind="attrs" v-on="on">
+              My Account
+              <v-icon right>
+                mdi-menu-down
+              </v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <!-- <v-list-item
+              :to="{ name: 'account' }"
+              router
+              exact
+              @click="getUpdateUser"
+            >
+              <v-list-item-action>
+                <v-icon> mdi-account </v-icon>
+              </v-list-item-action>
+              <v-list-item-title>Profile</v-list-item-title>
+            </v-list-item> -->
+            <v-list-item @click="logout">
+              <v-list-item-action>
+                <v-icon> mdi-logout </v-icon>
+              </v-list-item-action>
+              <v-list-item-title>Logout</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </template>
+
+      <!-- Logo Button di mobile -->
+      <v-btn
+        v-if="isMobile"
+        :to="isSubscribe === true ? '/subscription' : '/home'"
+        router
+        exact
+        class="d-flex align-center"
+        @click="getUpdateUser"
+      >
+        <div>
+          <img src="/logo-mux.png" alt="Logo" class="mr-2">
+        </div>
+        <h1 class="font-weight-semibold leading-normal text-xl text-uppercase">
+          {{ title }}
+        </h1>
+      </v-btn>
     </v-app-bar>
   </div>
 </template>
 
 <script>
 import packageInfo from '../../package.json'
+
 export default {
   name: 'NavbarComponent',
   data () {
     return {
+      path: '/',
       version: packageInfo.version,
       loading: false,
       showMessage: false,
@@ -217,8 +243,8 @@ export default {
       user: null,
       items: [
         {
-          icon: 'mdi-home',
-          title: 'Home',
+          icon: 'mdi-music-circle-outline',
+          title: 'Discover',
           to: '/home',
           isAuth: true,
           isSubscribe: false
@@ -230,13 +256,13 @@ export default {
           isAuth: true,
           isSubscribe: true
         },
-        {
-          icon: 'mdi-account',
-          title: 'My Account',
-          to: '/account',
-          isAuth: true,
-          isSubscribe: null
-        },
+        // {
+        //   icon: 'mdi-account',
+        //   title: 'Profile',
+        //   to: '/account',
+        //   isAuth: true,
+        //   isSubscribe: null
+        // },
         {
           icon: 'mdi-login',
           title: 'Login',
@@ -263,25 +289,44 @@ export default {
       return this.getIsSubscribe()
     }
   },
+  watch: {
+    dataUser: {
+      handler (newValue) {
+        this.user = newValue
+      },
+      deep: true // Jika `dataUser` adalah objek yang kompleks
+    }
+  },
   beforeDestroy () {
-    if (typeof window === 'undefined') { return }
+    if (typeof window === 'undefined') {
+      return
+    }
     window.removeEventListener('resize', this.onResize, { passive: true })
   },
   mounted () {
     this.onResize()
     window.addEventListener('resize', this.onResize, { passive: true })
     this.getLink()
-    this.getUpdateUser()
+
+    setTimeout(() => {
+      if (this.isAuthenticated) {
+        this.getUpdateUser()
+      }
+    }, 5000)
   },
   methods: {
     logout () {
       this.loading = true
+      const token = null
+      const user = null
       setTimeout(() => {
         this.showMessage = true
         this.colorTool = 'success'
         this.message = 'Logout Succesfull'
         setTimeout(() => {
-          this.$auth.logout()
+          // this.$auth.logout()
+          localStorage.removeItem('auth')
+          this.$store.commit('setAuth', { token, user })
           this.$router.push('/')
           this.showMessage = false
           this.loading = false
@@ -300,22 +345,34 @@ export default {
         return this.linkMenu
       }
     },
-    async getUpdateUser () {
-      if (this.dataUser !== null) {
-        await this.$axios.$get(`/api/user/${this.dataUser.id}`)
-          .then((response) => {
-            if (response.message === 'Succeed Get User By Id') {
-              this.user = response.data
-              this.fullname = this.user.fullname
-              this.linkAvatar = this.user.avatar
-            }
-          }).catch((error) => {
-            if (error.response) {
-              console.log(error)
-            }
-          })
+    getUpdateUser () {
+      console.log(this.$router.currentRoute.path)
+
+      if (this.dataUser) {
+        this.user = this.dataUser
+        this.fullname = this.user.fullname
+        this.linkAvatar = this.user.avatar
+        this.path = this.$router.currentRoute.path
       }
     },
+    // async getUpdateUser () {
+    //   if (this.dataUser !== null) {
+    //     // await this.$axios
+    //     //   .$get(`/api/user/${this.dataUser.id}`)
+    //     //   .then((response) => {
+    //     //     if (response.message === 'Succeed Get User By Id') {
+    //     //       this.user = response.data
+    //     //       this.fullname = this.user.fullname
+    //     //       this.linkAvatar = this.user.avatar
+    //     //     }
+    //     //   })
+    //     //   .catch((error) => {
+    //     //     if (error.response) {
+    //     //       console.log(error)
+    //     //     }
+    //     //   })
+    //   }
+    // },
     getIsSubscribe () {
       if (this.user !== null) {
         if (this.user.subscription === null) {
@@ -336,39 +393,39 @@ export default {
 }
 
 .custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
   }
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
   }
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
   }
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
   }
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>
