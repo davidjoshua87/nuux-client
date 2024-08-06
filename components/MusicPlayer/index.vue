@@ -356,6 +356,7 @@ button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 28px;
 }
 
 .play,
