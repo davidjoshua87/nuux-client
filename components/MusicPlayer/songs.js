@@ -1,5 +1,15 @@
 const songs = [
   {
+    noTrack: 12,
+    title: 'Begitu Besar Kasih-Mu',
+    artist: 'My JDs',
+    genre: 'Contemporary Christian Acoustic Worship',
+    seconds: 184,
+    cover:
+      'https://res.cloudinary.com/dj-project/image/upload/v1722970859/musicxperience/Begitu-Besar-Kasih-Mu-cover.png',
+    src: 'https://res.cloudinary.com/dj-project/video/upload/v1722978036/musicxperience/Begitu-Besar-Kasih-Mu-song.mp3'
+  },
+  {
     noTrack: 11,
     title: 'Iman dan Pengakuan',
     artist: 'My JDs',
