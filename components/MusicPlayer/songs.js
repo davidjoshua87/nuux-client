@@ -3,11 +3,11 @@ const songs = [
     noTrack: 12,
     title: 'Begitu Besar Kasih-Mu',
     artist: 'My JDs',
-    genre: 'Contemporary Christian Acoustic Worship',
-    seconds: 184,
+    genre: 'Modern Praise Acoustic Worship',
+    seconds: 183,
     cover:
       'https://res.cloudinary.com/dj-project/image/upload/v1722970859/musicxperience/Begitu-Besar-Kasih-Mu-cover.png',
-    src: 'https://res.cloudinary.com/dj-project/video/upload/v1722978036/musicxperience/Begitu-Besar-Kasih-Mu-song.mp3'
+    src: 'https://res.cloudinary.com/dj-project/video/upload/v1723017367/musicxperience/Begitu-Besar-Kasih-Mu-song.mp3'
   },
   {
     noTrack: 11,
